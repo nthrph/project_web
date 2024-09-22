@@ -1,0 +1,20 @@
+.h1 {
+    color: red; /* เปลี่ยนสีตัวอักษร */
+    font-family: 'Times New Roman', sans-serif; /* กำหนดฟอนต์ */
+    font-size: 32px; /* ขนาดฟอนต์ */
+    font-weight: bold; /* ความหนาของฟอนต์ */   
+    margin-left: 40px; /* เพิ่มพื้นที่ทางซ้าย */ 
+}
+
+.image-container {
+    /* display: flex; */
+    justify-content: space-around; /* กระจายรูปภาพให้มีพื้นที่ */
+    margin-left: 40px; /* เพิ่มพื้นที่ทางซ้าย */ 
+}
+
+.smaller-image {
+    width: 350px; /* กำหนดขนาดรูปให้เล็กลง */
+    height: 350px;
+    object-fit: cover; /* ตัดส่วนที่เกินให้พอดีกับขนาด */
+    margin: 30px; /*เพิ่มพื้นที่ระหว่างรูป */
+}

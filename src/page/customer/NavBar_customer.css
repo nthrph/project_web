@@ -9,12 +9,16 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    position: sticky; /* ตรึง Navbar ไว้ที่ด้านบนเมื่อเลื่อนหน้าลง */
+    top: 0; /* กำหนดตำแหน่งบนสุด */
+    z-index: 1000; /* ทำให้ Navbar อยู่ด้านหน้า */
   }
   
   .nav-links {
     list-style: none;
     display: flex;
-    gap: 30px;
+    gap: 50px;
   }
   
   .nav-links li {

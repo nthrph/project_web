@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './page/shop/Status_page';
+import Status_page from './page/shop/Status_page';
 import reportWebVitals from './reportWebVitals';
+import NavBar_component from './page/shop/NavBar_component';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* <Status_page />
+    <Status_page />
+    <Status_page /> */}
+    <NavBar_component />
   </React.StrictMode>
 );
 

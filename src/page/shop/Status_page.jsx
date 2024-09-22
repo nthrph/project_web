@@ -14,16 +14,6 @@ function App() {
 
   return (
     <div className="container">
-      <header>
-        <nav>
-          <ul>
-            <li>Cake</li>
-            <li>Cookie</li>
-            <li>Drink</li>
-            <li>Status</li>
-          </ul>
-        </nav>
-      </header>
 
       <main>
         <table>
@@ -59,21 +49,6 @@ function App() {
           </tbody>
         </table>
       </main>
-
-      <footer>
-        <div className="contact">
-          <p>Contact</p>
-          <p>Address: 123 Street, Chiang Mai</p>
-          <p>Phone: +66 123 4567</p>
-        </div>
-        <div className="open-close">
-          <p>Open: 9:00 AM - 8:00 PM</p>
-          <p>Mon - Sun</p>
-        </div>
-        <div className="map">
-          <img src="map.png" alt="Map" />
-        </div>
-      </footer>
     </div>
   );
 }

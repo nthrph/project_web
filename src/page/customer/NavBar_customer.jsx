@@ -1,28 +1,28 @@
 import React from 'react';
-import './NavBar_customer.css';
 import { FaHome, FaShoppingCart, FaListAlt } from 'react-icons/fa';
+import './NavBar_customer.css'; // แก้เส้นทางให้ถูกต้อง
 
-const NavBar_customer = ({ setCurrentPage }) => {
+const NavBar_customer = () => {
   return (
     <nav className="navbar">
       <ul className="nav-links">
         <li>
-        <a onClick={() => setCurrentPage('home')}>
-          <FaHome className="icon" />
-          <span>HOME</span>
-        </a>
-        </li>
-        <li>
-        <a onClick={() => setCurrentPage('cart')}>
-          <FaShoppingCart className="icon" />
-          <span>CART</span>
+          <a href="/customer/Home">  
+            <FaHome className="icon" />
+            <span>Home</span>
           </a>
         </li>
         <li>
-        <a onClick={() => setCurrentPage('order')}>
-          <FaListAlt className="icon" />
-          <span>ORDER</span>
-        </a>
+          <a href="/customer/Cart">
+            <FaShoppingCart className="icon" />
+            <span>Cart</span>
+          </a>
+        </li>
+        <li>
+          <a href="/customer/Order">
+            <FaListAlt className="icon" />
+            <span>Order</span>
+          </a>
         </li>
       </ul>
     </nav>

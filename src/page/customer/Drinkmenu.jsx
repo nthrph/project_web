@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CakeList.css';
-import NavBar_component from './NavBar_component';
+import './Menu.css';
+import NavBar_customer from '../customer/NavBar_customer';
 import { FaEdit } from "react-icons/fa";
-import ContactSection from './ContactSection';
+import ContactSection from '../shop/ContactSection';
 
-const DrinkList = () => {
+import homescreen from '../../images/drinkscreen.png';
+import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
+
+import drinkscreen from '../../images/drinkscreen.png';
+
+
+const Drinkmenu = () => {
     const [Drink, setDrink] = useState([]);
+    const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
 
     // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
     useEffect(() => {
@@ -19,12 +26,15 @@ const DrinkList = () => {
             });
     }, []);
 
+    // ฟังก์ชันเมื่อกดปุ่ม add
+    const handleAddToHome = () => {
+        navigate('/customer/Home'); // นำทางไปยังหน้าตะกร้า
+    };
+
     return (
         <div>
-            {/* <NavBar_component /> */}
-
+            <img src={drinkscreen} alt="screen2"style={{ width: '100%', height: '500%' }} />
             <div className="cake-container">
-
                 <h1>Drink</h1>
                 <div className="cake-grid">
                     {Drink.map((Drink) => (
@@ -32,15 +42,14 @@ const DrinkList = () => {
                             <img src={Drink.image_url} alt={Drink.name} className="cake-image" />
                             <p>Name: {Drink.name}</p>
                             <p className="cake-price">{Drink.price} THB</p>
-                            <button className="edit-button"><FaEdit /></button>
                         </div>
                     ))}
                 </div>
-                <button className="add-button">+</button>
             </div>
+            <button className="back-button" onClick={handleAddToHome}>Back</button>
             <ContactSection />
         </div>
     );
 };
 
-export default DrinkList;
+export default Drinkmenu;

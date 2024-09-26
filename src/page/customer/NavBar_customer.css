@@ -3,43 +3,42 @@
 /* อย่าลืม npm install react-icons */
 
 .navbar {
-    background-color: white;
-    padding: 10px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    position: sticky; /* ตรึง Navbar ไว้ที่ด้านบนเมื่อเลื่อนหน้าลง */
-    top: 0; /* กำหนดตำแหน่งบนสุด */
-    z-index: 1000; /* ทำให้ Navbar อยู่ด้านหน้า */
-  }
-  
-  .nav-links {
-    list-style: none;
-    display: flex;
-    gap: 50px;
-  }
-  
-  .nav-links li {
-    text-align: center;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #800000; 
-    font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .icon {
-    font-size: 20px;
-  }
-  
-  .nav-links a:hover {
-    color: #b22222; 
-  }
-  
+  position: sticky; /* ตรึง Navbar ไว้ที่ด้านบนเมื่อเลื่อนหน้าลง */
+  top: 0; /* กำหนดตำแหน่งบนสุด */
+  z-index: 1000; /* ทำให้ Navbar อยู่ด้านหน้า */
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 50px;
+}
+
+.nav-links li {
+  text-align: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #800000; 
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.nav-links a:hover {
+  color: #b22222; 
+}

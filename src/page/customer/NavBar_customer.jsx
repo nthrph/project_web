@@ -28,5 +28,4 @@ const NavBar_customer = () => {
     </nav>
   );
 };
-
 export default NavBar_customer;

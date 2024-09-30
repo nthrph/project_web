@@ -84,7 +84,7 @@ app.get('/home_cake', (req, res) => {
   });
 });
 app.get('/home_cookie', (req, res) => {
-  const sql = 'SELECT * FROM products WHERE category = "Cake" AND id BETWEEN 9 AND 12'; // เพิ่มเงื่อนไข id  
+  const sql = 'SELECT * FROM products WHERE category = "Cookie" AND id BETWEEN 9 AND 12'; // เพิ่มเงื่อนไข id  
   // const sql = 'SELECT * FROM products WHERE name="Strawberry Cheesecake';
   db.query(sql, (err, result) => {
     if (err) throw err;
@@ -92,7 +92,7 @@ app.get('/home_cookie', (req, res) => {
   });
 });
 app.get('/home_drink', (req, res) => {
-  const sql = 'SELECT * FROM products WHERE category = "Cake" AND id BETWEEN 13 AND 16'; // เพิ่มเงื่อนไข id  
+  const sql = 'SELECT * FROM products WHERE category = "Drink" AND id BETWEEN 13 AND 16'; // เพิ่มเงื่อนไข id  
   // const sql = 'SELECT * FROM products WHERE name="Strawberry Cheesecake';
   db.query(sql, (err, result) => {
     if (err) throw err;

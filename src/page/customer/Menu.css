@@ -1,69 +1,204 @@
-.cake-container {
-    width: 80%;
-    margin: 0 auto;
-    /* text-align: center; */
-    color: #800000;
-  }
-  
-  .cake-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 60px;
-  }
-  
-  .cake-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-    position: relative;
-    width: 220px;
-    
-  }
-  
-  .cake-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .cake-price {
-    color: red;
-    font-weight: bold;
-  }
-  
-  /* กล่อง Edit ของ shop */
-  /* .edit-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: #ffffff;
-    background-color: #fc565670;
+.menu-container {
+  width: 80%;
+  margin: 0 auto;
+  /* text-align: center; */
+  color: #800000;
+}
 
-  } */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 60px;
+}
+
+.menu-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  position: relative;
+  width: 220px;
   
-  .add-button {
-    margin-top: 50px;
-    background-color: #f0f0f0;
-    border: none;
-    font-size: 36px;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    cursor: pointer;
-  }
-  
-  .back-button{
-    margin: 50px;
-    background-color: #92BEE7;
-    border: none;
-    text-align: center;
-    font-size: 24px;
-    width: 100px;
-    height: 40px;
-    cursor: pointer;
-  }
+}
+
+.menu-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.menu-price {
+  color: red;
+  font-weight: bold;
+}
+
+/* กล่อง Edit ของ shop */
+/* .edit-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffffff;
+  background-color: #fc565670;
+
+} */
+
+.add-button {
+  margin-top: 50px;
+  background-color: #f0f0f0;
+  border: none;
+  font-size: 36px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+}
+
+.back-button{
+  margin: 50px;
+  background-color: #92BEE7;
+  border: none;
+  text-align: center;
+  font-size: 24px;
+  width: 100px;
+  height: 40px;
+  cursor: pointer;
+}
+
+
+/* pop up */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* เพิ่มความทึบของพื้นหลัง */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* .modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 450px; *//* กำหนดความกว้างให้เล็กลง */
+  /*height: 550px;  กำหนดความสูงให้เล็กลง 
+  position: relative;
+  text-align: center;*/
+  /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); เพิ่มเงาเพื่อให้ pop-up ดูเด่นขึ้น 
+} */
+
+.modal-content {
+  position: relative;
+  margin: 10% auto; /* Adjust the top margin */
+  padding: 20px;
+  width: 80%; /* Adjust width to the desired size */
+  max-width: 600px; /* Set maximum width */
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto; /* Enable scrolling inside the modal */
+}
+
+
+.modal-image {
+  width: 70%;
+  height: 285px; /* ปรับขนาดรูปภาพให้พอดีกับ pop-up */
+  object-fit: contain; /* เพื่อไม่ให้รูปผิดรูปทรง */
+  display: block; /* ทำให้รูปภาพเป็น block element */
+  margin: 0 auto; /* จัดกึ่งกลางรูปภาพในแนวนอน */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #333; /* สีปุ่มปิด */
+}
+
+.stockpop-text{
+font-size: 16px;
+font-weight: bold;
+text-align: left; /* จัดข้อความชิดซ้าย */
+}
+
+.pricepop-text{
+color: red;
+font-size: 16px;
+font-weight: bold;
+text-align: left; /* จัดข้อความชิดซ้าย */
+}
+
+.in-text{
+font-size: 16px;
+font-weight: bold;
+text-align: left; /* จัดข้อความชิดซ้าย */
+}
+
+.addcart-button{
+margin: 10px;
+background-color: yellow;
+border: none;
+text-align: center;
+font-size: 16px;
+width: 150px;
+height: 40px;
+cursor: pointer;
+}
+
+.order-button{
+margin: 10px;
+background-color:rebeccapurple;
+border: none;
+text-align: center;
+font-size: 16px;
+width: 95px;
+height: 40px;
+cursor: pointer;
+}
+
+
+/*กล่องใส่ชื่อ*/
+textarea {
+  width: 50%; /* ตั้งค่าความกว้างให้เต็มคอนเทนเนอร์ */
+  height: 40px; /* ตั้งค่าความสูงตามต้องการ */
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* ให้ padding และ border ถูกนับเป็นส่วนหนึ่งของ width และ height */
+  resize: vertical; /* อนุญาตให้ผู้ใช้ปรับขนาดแนวตั้งได้ */
+}
+
+/*กล่องใส่จำนวน*/
+.piece-container {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* จัดให้อยู่ตรงกลาง */
+}
+
+.piece-container label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.piece-input {
+  width: 60px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}

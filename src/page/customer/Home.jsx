@@ -21,7 +21,7 @@ const Home = () => {
     const [selectedDrink, setSelectedDrink] = useState(null); // สำหรับเก็บเค้กที่เลือก
 
     const [userName, setUserName] = useState('');
-    const [piece, setPiece] = useState(1); // สร้าง state สำหรับเก็บจำนวนสินค้า
+    const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
 
     const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
 
@@ -65,14 +65,6 @@ const Home = () => {
             navigate('/customer/Drinkmenu'); // นำทางไปยังหน้าตะกร้า
         };
 
-        // const handleAddToCart = () => {
-        //     navigate('/customer/Cart'); // นำทางไปยังหน้าตะกร้า
-        // };
-        // const handleAddToOrder = () => {
-        //     navigate('/customer/Order'); // นำทางไปยังหน้าตะกร้า
-        // };
-
-
         // ฟังก์ชันสำหรับเลือกเค้กเพื่อแสดง Pop-up
         const handleCakeClick = (cake) => {
             setSelectedCake(cake); // กำหนดเค้กที่เลือก
@@ -91,6 +83,7 @@ const Home = () => {
             setSelectedCake(null);
             setSelectedCookie(null);
             setSelectedDrink(null); // ล้างเค้กที่เลือกเมื่อปิด
+            setPiece(); // รีเซ็ตค่า piece กลับเป็นค่าเริ่มต้น
         };
 
         const handleNameSubmit = () => {
@@ -175,21 +168,10 @@ const Home = () => {
                                 value={piece}
                                 onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
                                 min="1"
-                                max={selectedCake.piece} // จำกัดไม่ให้เกินจำนวนสต็อก
+                                max={selectedCake.quantity} // จำกัดไม่ให้เกินจำนวนสต็อก
                                 className="piece-input"
                             />
                             </div>
-                            {/* กล่องข้อความสำหรับผู้ใช้ป้อนคอมเมนต์ */}
-                            <p>Name:
-                                <textarea
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder="Enter your Name here..."
-                                    rows="5" // ปรับจำนวนแถวตามต้องการ
-                                    cols="50" // ปรับจำนวนคอลัมน์ตามต้องการ
-                                    // className="user-comment-box"
-                                />
-                            </p>
 
                             {/* กดปุ่มส่งไป Database */}
                             <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
@@ -216,22 +198,10 @@ const Home = () => {
                                 value={piece}
                                 onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
                                 min="1"
-                                max={selectedCookie.piece} // จำกัดไม่ให้เกินจำนวนสต็อก
+                                max={selectedCookie.quantity} // จำกัดไม่ให้เกินจำนวนสต็อก
                                 className="piece-input"
                             />
                             </div>
-
-                            {/* กล่องข้อความสำหรับผู้ใช้ป้อนคอมเมนต์ */}
-                            <p>Name:
-                                <textarea
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder="Enter your Name here..."
-                                    rows="5" // ปรับจำนวนแถวตามต้องการ
-                                    cols="50" // ปรับจำนวนคอลัมน์ตามต้องการ
-                                    // className="user-comment-box"
-                                />
-                            </p>
 
                             {/* กดปุ่มส่งไป Database */}
                             <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
@@ -258,22 +228,9 @@ const Home = () => {
                                 value={piece}
                                 onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
                                 min="1"
-                                max={selectedDrink.piece} // จำกัดไม่ให้เกินจำนวนสต็อก
                                 className="piece-input"
                             />
                             </div>
-
-                            {/* กล่องข้อความสำหรับผู้ใช้ป้อนคอมเมนต์ */}
-                            <p>Name:
-                                <textarea
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder="Enter your Name here..."
-                                    rows="5" // ปรับจำนวนแถวตามต้องการ
-                                    cols="50" // ปรับจำนวนคอลัมน์ตามต้องการ
-                                    // className="user-comment-box"
-                                />
-                            </p>
 
                             {/* กดปุ่มส่งไป Database */}
                             <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>

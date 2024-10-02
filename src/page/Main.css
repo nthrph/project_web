@@ -1,0 +1,102 @@
+/* Main.css */
+
+/* สไตล์สำหรับ background image */
+.background-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.h1 {
+    text-size-adjust: 18px;
+    font-weight: bold;
+  }
+  
+/* สไตล์สำหรับปุ่ม Shopping */
+.shopping-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 32px;
+    background-color: #885035;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* สไตล์สำหรับปุ่ม Store */
+.store-button {
+    position: absolute;
+    top: 90%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 32px;
+    background-color: #565B3C;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* สไตล์สำหรับ pop-up */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* ทำให้พื้นหลังโปร่งใส */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-contentM {
+    background-color: #FDDEC2;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    position: relative;
+}
+
+/* ปุ่มปิด Pop-up */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* สไตล์สำหรับฟอร์มและ input */
+form {
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #8A4C23;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

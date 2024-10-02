@@ -17,7 +17,7 @@ const Drinkmenu = () => {
     const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
 
     const [userName, setUserName] = useState('');
-    const [piece, setPiece] = useState(1); // สร้าง state สำหรับเก็บจำนวนสินค้า
+    const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
 
     // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
     useEffect(() => {
@@ -34,25 +34,20 @@ const Drinkmenu = () => {
     const handleAddToHome = () => {
         navigate('/customer/Home'); // นำทางไปยังหน้าตะกร้า
     };
-    // const handleAddToCart = () => {
-    //     navigate('/customer/Cart'); // นำทางไปยังหน้าตะกร้า
-    // };
-    // const handleAddToOrder = () => {
-    //     navigate('/customer/Order'); // นำทางไปยังหน้าตะกร้า
-    // };
 
     // ฟังก์ชันสำหรับเลือกเค้กเพื่อแสดง Pop-up
     const handleDrinkClick = (Drink) => {
         setSelectedDrink(Drink); // กำหนดเค้กที่เลือก
     };
 
-    // ฟังก์ชันสำหรับปิด Pop-up
+   // ฟังก์ชันปิด Pop-up และรีเซ็ตค่า
     const closeModal = () => {
-        setSelectedDrink(null); // ล้างเค้กที่เลือกเมื่อปิด
+        setSelectedDrink(null); // ล้างค่าที่เลือกเมื่อปิด Pop-up
+        setPiece(); // รีเซ็ตค่า piece กลับเป็นค่าเริ่มต้น (1)
     };
 
     const handleNameSubmit = () => {
-        axios.post('http://localhost:3001/name', { cookieId: selectedDrink.id, name: userName })
+        axios.post('http://localhost:3001/name', { drinkId: selectedDrink.id, name: userName })
             .then(response => {
                 console.log(response.data); // ตรวจสอบการตอบกลับจากเซิร์ฟเวอร์
                 setUserName(''); // ล้างกล่องข้อความหลังจากส่ง
@@ -89,7 +84,6 @@ const Drinkmenu = () => {
                             <img src={selectedDrink.image_url} alt={selectedDrink.name} className="modal-image" />
                             
                             <h2>{selectedDrink.name}</h2>
-                            <p className='stockpop-text'>Stock: {selectedDrink.quantity}</p>
                             <p className='pricepop-text'>Price: {selectedDrink.price} THB</p>
                             <p className='in-text'>Ingredients: <br/>{selectedDrink.ingredients}</p>
 
@@ -102,22 +96,9 @@ const Drinkmenu = () => {
                                 value={piece}
                                 onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
                                 min="1"
-                                max={selectedDrink.piece} // จำกัดไม่ให้เกินจำนวนสต็อก
                                 className="piece-input"
                             />
                             </div>
-
-                            {/* กล่องข้อความสำหรับผู้ใช้ป้อนคอมเมนต์ */}
-                            <p>Name:
-                                <textarea
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder="Enter your Name here..."
-                                    rows="5" // ปรับจำนวนแถวตามต้องการ
-                                    cols="50" // ปรับจำนวนคอลัมน์ตามต้องการ
-                                    // className="user-comment-box"
-                                />
-                            </p>
 
                             {/* กดปุ่มส่งไป Database */}
                             <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>

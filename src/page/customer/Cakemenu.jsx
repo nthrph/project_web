@@ -17,7 +17,7 @@ const Cakemenu = () => {
     const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
 
     const [userName, setUserName] = useState('');
-    const [piece, setPiece] = useState(1); // สร้าง state สำหรับเก็บจำนวนสินค้า
+    const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
 
     // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
     useEffect(() => {
@@ -48,10 +48,11 @@ const Cakemenu = () => {
     // ฟังก์ชันสำหรับปิด Pop-up
     const closeModal = () => {
         setSelectedCake(null); // ล้างเค้กที่เลือกเมื่อปิด
+        setPiece(); // รีเซ็ตค่า piece กลับเป็นค่าเริ่มต้น
     };
 
     const handleNameSubmit = () => {
-        axios.post('http://localhost:3001/name', { cookieId: selectedCake.id, name: userName })
+        axios.post('http://localhost:3001/name', { cakeId: selectedCake.id, name: userName })
             .then(response => {
                 console.log(response.data); // ตรวจสอบการตอบกลับจากเซิร์ฟเวอร์
                 setUserName(''); // ล้างกล่องข้อความหลังจากส่ง
@@ -103,23 +104,10 @@ const Cakemenu = () => {
                                 value={piece}
                                 onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
                                 min="1"
-                                max={selectedCake.piece} // จำกัดไม่ให้เกินจำนวนสต็อก
+                                max={selectedCake.quantity} // จำกัดไม่ให้เกินจำนวนสต็อก
                                 className="piece-input"
                             />
                             </div>
-
-                            {/* กล่องข้อความสำหรับผู้ใช้ป้อนคอมเมนต์ */}
-                            <p>Name:
-                                <textarea
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder="Enter your Name here..."
-                                    rows="5" // ปรับจำนวนแถวตามต้องการ
-                                    cols="50" // ปรับจำนวนคอลัมน์ตามต้องการ
-                                    // className="user-comment-box"
-                                />
-                            </p>
-
 
                             {/* กดปุ่มส่งไป Database */}
                             <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>

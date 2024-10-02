@@ -33,19 +33,6 @@
   font-weight: bold;
 }
 
-/* กล่อง Edit ของ shop */
-/* .edit-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: #ffffff;
-  background-color: #fc565670;
-
-} */
-
 .add-button {
   margin-top: 50px;
   background-color: #f0f0f0;
@@ -83,16 +70,6 @@
   z-index: 1000;
 }
 
-/* .modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 450px; *//* กำหนดความกว้างให้เล็กลง */
-  /*height: 550px;  กำหนดความสูงให้เล็กลง 
-  position: relative;
-  text-align: center;*/
-  /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); เพิ่มเงาเพื่อให้ pop-up ดูเด่นขึ้น 
-} */
 
 .modal-content {
   position: relative;
@@ -147,7 +124,7 @@ text-align: left; /* จัดข้อความชิดซ้าย */
 
 .addcart-button{
 margin: 10px;
-background-color: yellow;
+background-color: #EA5C5C;
 border: none;
 text-align: center;
 font-size: 16px;
@@ -158,7 +135,7 @@ cursor: pointer;
 
 .order-button{
 margin: 10px;
-background-color:rebeccapurple;
+background-color:#E5E298;
 border: none;
 text-align: center;
 font-size: 16px;

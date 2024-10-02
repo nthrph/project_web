@@ -18,7 +18,7 @@ const Cookiemenu = () => {
     const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
 
     const [userName, setUserName] = useState('');
-    const [piece, setPiece] = useState(1); // สร้าง state สำหรับเก็บจำนวนสินค้า
+    const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
 
 
     // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
@@ -51,6 +51,7 @@ const Cookiemenu = () => {
     // ฟังก์ชันสำหรับปิด Pop-up
     const closeModal = () => {
         setSelectedCookie(null); // ล้างเค้กที่เลือกเมื่อปิด
+        setPiece(); // รีเซ็ตค่า piece กลับเป็นค่าเริ่มต้น
     };
     
     //ส่งชื่อที่ผู้ใช้ป้อนไปยังเซิร์ฟเวอร์:
@@ -78,7 +79,7 @@ const Cookiemenu = () => {
                         <div key={Cookie.id} className="menu-card" onClick={() => handleCookieClick(Cookie)}>
                             <img src={Cookie.image_url} alt={Cookie.name} className="menu-image" />
                             <p style={{fontWeight:"bold" }}> {Cookie.name}</p>
-                            <p><span style={{fontWeight: "bold"}}>Stock : </span>{Cookie.piece}</p>
+                            <p><span style={{fontWeight: "bold"}}>Stock : </span>{Cookie.quantity}</p>
                             <p className="menu-price">{Cookie.price} THB</p>
                         </div>
                     ))}
@@ -94,7 +95,7 @@ const Cookiemenu = () => {
                             <img src={selectedCookie.image_url} alt={selectedCookie.name} className="modal-image" />
                             
                             <h2>{selectedCookie.name}</h2>
-                            <p className='stockpop-text'>Stock: {selectedCookie.piece}</p>
+                            <p className='stockpop-text'>Stock: {selectedCookie.quantity}</p>
                             <p className='pricepop-text'>Price: {selectedCookie.price} THB</p>
                             <p className='in-text'>Ingredients: <br/>{selectedCookie.ingredients}</p>
 
@@ -108,22 +109,11 @@ const Cookiemenu = () => {
                                 value={piece}
                                 onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
                                 min="1"
-                                max={selectedCookie.piece} // จำกัดไม่ให้เกินจำนวนสต็อก
+                                max={selectedCookie.quantity} // จำกัดไม่ให้เกินจำนวนสต็อก
                                 className="piece-input"
                             />
                             </div>
 
-                            {/* กล่องข้อความสำหรับผู้ใช้ป้อนคอมเมนต์ */}
-                            <p>Name:
-                                <textarea
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder="Enter your Name here..."
-                                    rows="5" // ปรับจำนวนแถวตามต้องการ
-                                    cols="50" // ปรับจำนวนคอลัมน์ตามต้องการ
-                                    // className="user-comment-box"
-                                />
-                            </p>
                             {/* กดปุ่มส่งไป Database */}
                             <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
                             <button className="order-button">ORDER</button>

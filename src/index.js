@@ -1,13 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Status_page from './page/shop/Status';
 import reportWebVitals from './reportWebVitals';
-import NavBar_component from './page/shop/NavBar_component';
-import Cake from './page/shop/Cake';
 import App from './App';
-import CookieList from './page/shop/Cookie';
-import DrinkList from './page/shop/Drink';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

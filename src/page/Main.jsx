@@ -35,7 +35,7 @@ const Main = () => {
     };
 
     const handleStoreClick = () => {
-        navigate('/shop/Status');
+        navigate('/shop/Cake');
     };
     return (
         <div style={{ position: 'relative', width: '100%', height: '100vh' }}>

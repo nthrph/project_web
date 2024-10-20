@@ -1,246 +1,237 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import CakeList from '../shop/Cake';
-import NavBar_customer from '../customer/NavBar_customer';
-import { FaEdit } from "react-icons/fa";
-import { TbBackground } from 'react-icons/tb';
-import ContactSection from '../shop/ContactSection';
-import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import CakeList from '../shop/Cake';
+// import NavBar_customer from '../customer/NavBar_customer';
+// import { FaEdit } from "react-icons/fa";
+// import { TbBackground } from 'react-icons/tb';
+// import ContactSection from '../shop/ContactSection';
+// import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
 
 import homescreen from '../../images/screen2.png';
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../shop/StyleMenu.css';
+import '../customer/PopupForm.css';
+import './Menu.css';
+
+import NavBar_customer from '../customer/NavBar_customer';
+import ContactSection from '../shop/ContactSection';
+import PopupForm from '../customer/PopupForm';
+import AddProductForm from '../shop/AddProductForm';
+
+// import cakescreen from '../../images/cakescreen.png';
+import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
 
 
 
 const Home = () => {
-    const [Cake, setCakes] = useState([]);
-    const [Cookie, setCookies] = useState([]);
-    const [Drink, setDrink] = useState([]);
+    const [cakes, setCakes] = useState([]);
+    const [cookies, setCookies] = useState([]);
+    const [drinks, setDrinks] = useState([]);
 
-    const [selectedCake, setSelectedCake] = useState(null); // สำหรับเก็บเค้กที่เลือก
-    const [selectedCookie, setSelectedCookie] = useState(null); // สำหรับเก็บเค้กที่เลือก
-    const [selectedDrink, setSelectedDrink] = useState(null); // สำหรับเก็บเค้กที่เลือก
+    // const [selectedCake, setSelectedCake] = useState(null); // สำหรับเก็บเค้กที่เลือก
+    // const [selectedCookie, setSelectedCookie] = useState(null); // สำหรับเก็บเค้กที่เลือก
+    // const [selectedDrink, setSelectedDrink] = useState(null); // สำหรับเก็บเค้กที่เลือก
+    const [isLoading, setIsLoading] = useState(true);
+    const [isPopOpen, setIsPopOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const [userName, setUserName] = useState('');
-    const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
+    // const [userName, setUserName] = useState('');
+    // const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
 
     const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
+    const URL = "http://localhost:5000";
 
     // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
     useEffect(() => {
-        axios.get('http://localhost:3001/home_cake')
+        axios.get(`${URL}/api/products_shop/cakehome`)
             .then(response => {
-                setCakes(response.data); // เก็บข้อมูลเค้กใน state
+                if (response.data) {
+                    setCakes(response.data);
+                }
+                setIsLoading(false);
             })
             .catch(error => {
-                console.error('There was an error fetching the cakes!', error);
+                console.error("There was an error fetching the cakes!", error);
+                setIsLoading(false);
             });
-
-        axios.get('http://localhost:3001/home_cookie')
+        axios.get(`${URL}/api/products_shop/cookiehome`)
             .then(response => {
-                setCookies(response.data); // เก็บข้อมูลเค้กใน state
+                if (response.data) {
+                    setCookies(response.data);
+                }
+                setIsLoading(false);
             })
             .catch(error => {
-                console.error('There was an error fetching the cookie!', error);
+                console.error("There was an error fetching the cookies!", error);
+                setIsLoading(false);
             });
-
-        axios.get('http://localhost:3001/home_drink')
+        axios.get(`${URL}/api/products_shop/drinkhome`)
             .then(response => {
-                setDrink(response.data); // เก็บข้อมูลเค้กใน state
+                if (response.data) {
+                    setDrinks(response.data);
+                }
+                setIsLoading(false);
             })
             .catch(error => {
-                console.error('There was an error fetching the drink!', error);
+                console.error("There was an error fetching the drinks!", error);
+                setIsLoading(false);
             });
-        }, []);
+    }, []);
 
-        // ฟังก์ชันเมื่อกดปุ่ม add
-        const handleAddToCake = () => {
-            navigate('/customer/Cakemenu'); // นำทางไปยังหน้าตะกร้า
-        };
-        // ฟังก์ชันเมื่อกดปุ่ม add
-        const handleAddToCookie = () => {
-            navigate('/customer/Cookiemenu'); // นำทางไปยังหน้าตะกร้า
-        };
-        // ฟังก์ชันเมื่อกดปุ่ม add
-        const handleAddToDrink = () => {
-            navigate('/customer/Drinkmenu'); // นำทางไปยังหน้าตะกร้า
-        };
+    const openPopupForm = (product) => {
+        if (product) {
+            setSelectedProduct(product);
+            setIsPopOpen(true);
+        }
+    };
 
-        // ฟังก์ชันสำหรับเลือกเค้กเพื่อแสดง Pop-up
-        const handleCakeClick = (cake) => {
-            setSelectedCake(cake); // กำหนดเค้กที่เลือก
-        };
-        // ฟังก์ชันสำหรับเลือกเค้กเพื่อแสดง Pop-up
-        const handleCookieClick = (Cookie) => {
-            setSelectedCookie(Cookie); // กำหนดเค้กที่เลือก
-        };
-        // ฟังก์ชันสำหรับเลือกเค้กเพื่อแสดง Pop-up
-        const handleDrinkClick = (Drink) => {
-            setSelectedDrink(Drink); // กำหนดเค้กที่เลือก
-        };
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
 
-        // ฟังก์ชันสำหรับปิด Pop-up
-        const closeModal = () => {
-            setSelectedCake(null);
-            setSelectedCookie(null);
-            setSelectedDrink(null); // ล้างเค้กที่เลือกเมื่อปิด
-            setPiece(); // รีเซ็ตค่า piece กลับเป็นค่าเริ่มต้น
-        };
+    // const openAddForm = () => {
+    //     setIsAddFormOpen(true);
+    // };
 
-        const handleNameSubmit = () => {
-            axios.post('http://localhost:3001/name', { cookieId: selectedCookie.id, name: userName })
-                .then(response => {
-                    console.log(response.data); // ตรวจสอบการตอบกลับจากเซิร์ฟเวอร์
-                    setUserName(''); // ล้างกล่องข้อความหลังจากส่ง
-                    closeModal(); // ปิด modal หลังจากส่งข้อความ
-                })
-                .catch(error => {
-                    console.error('Error posting name:', error);
-                });
-        };
+    const closeAddForm = () => {
+        setIsAddFormOpen(false);
+    };
+
+    const goToCake = () => {
+        navigate('/customer/Cakemenu'); // นำทางไปยังหน้าตะกร้า
+    };
+    const goToCookie = () => {
+        navigate('/customer/Cookiemenu'); // นำทางไปยังหน้าตะกร้า
+    };
+    const goToDrink = () => {
+        navigate('/customer/Drinkmenu'); // นำทางไปยังหน้าตะกร้า
+    };
 
 
+    const handleSaveProduct = (updatedProduct) => {
+        axios.put(`${URL}/api/updateproduct/${updatedProduct.id}`, updatedProduct)
+            .then((response) => {
+                if (response.data.status === "ok") {
+                    // ตรวจสอบผลลัพธ์ที่ได้รับ
+                    console.log("Updated product successfully:", updatedProduct);
 
+                    setCakes(prevCakes =>
+                        prevCakes.map(cake =>
+                            cake.id === updatedProduct.id ? { ...cake, ...updatedProduct } : cake
+                        )
+                    );
+                    setIsPopOpen(false); // ปิด Modal
+                    setCookies(prevCookies =>
+                        prevCookies.map(cookie =>
+                            cookie.id === updatedProduct.id ? { ...cookie, ...updatedProduct } : cookie
+                        )
+                    );
+                    // ปรับปรุง state ของ drinks ที่นี่
+                    setDrinks(prevDrinks =>
+                        prevDrinks.map(drink =>
+                            drink.id === updatedProduct.id ? { ...drink, ...updatedProduct } : drink
+                        )
+                    );
+                    setIsPopOpen(false); // ปิด Modal
+                }
+            })
+            .catch(error => {
+                console.error("Error updating product", error);
+            });
+    };
+    
+    const handleSavenewProduct = (newProduct) => {
+        axios.post(`${URL}/api/addeproduct`, newProduct)
+            .then(response => {
+                if (response.data.status === "ok") {
+                    setCakes(prevCakes => [...prevCakes, response.data.product]);
+                    setIsAddFormOpen(false); // ปิดฟอร์ม
+                }
+                if (response.data.status === "ok") {
+                    setCookies(prevCookies => [...prevCookies, response.data.product]);
+                    setIsAddFormOpen(false); // ปิดฟอร์ม
+                }
+                if (response.data.status === "ok") {
+                    setDrinks(prevDrinks => [...prevDrinks, response.data.product]);
+                    setIsAddFormOpen(false); // ปิดฟอร์ม
+                }
+            })
+            .catch(error => {
+                console.error("Error adding product", error);
+            });
+    };
+    
     return (
         <div>
             <NavBar_customer />
             <img src={homescreen} alt="screen2"style={{ width: '100%', height: '500%' }} />
-
-            <div className="menu-container">
-
-                <h1>Cakes</h1>
-                <div className="menu-grid">
-                    {Cake.map((cake) => (
-                        <div key={cake.id} className="menu-card"onClick={() => handleCakeClick(cake)}>
-                            <img src={cake.image_url} alt={cake.name} className="menu-image" />
-                            <p style={{fontWeight:"bold" }}> {cake.name}</p>
-                            <p><span style={{fontWeight: "bold"}}>Stock : </span>{cake.quantity}</p>
-                            <p className="menu-price">{cake.price} THB</p>
+            <h1>Cakes</h1>
+            <div className="cakehome-grid">
+                {cakes.length > 0 ? (
+                    cakes.map((cake) => (
+                        <div key={cake.id} className="cake-card"onClick={() => openPopupForm(cake)}>
+                          <img src={cake.img} alt={cake.name_bakery} className="cake-image" />
+                          <p style={{ fontWeight: "bold" }}>{cake.name_bakery}</p>
+                          <p><span style={{ fontWeight: "bold" }}>Stock: </span>{cake.quantity}</p>
+                          <p className="cake-price">{cake.price} THB</p>
                         </div>
-                    ))}
-                    <button className="add-button" onClick={handleAddToCake}>+</button>
-                </div>
-
-                <h1>Cookie</h1>
-                <div className="menu-grid">
-                    {Cookie.map((Cookie) => (
-                        <div key={Cookie.id} className="menu-card" onClick={() => handleCookieClick(Cookie)}>
-                            <img src={Cookie.image_url} alt={Cookie.name} className="menu-image" />
-                            <p style={{fontWeight:"bold" }}> {Cookie.name}</p>
-                            <p><span style={{fontWeight: "bold"}}>Stock : </span>{Cookie.quantity}</p>
-                            <p className="menu-price">{Cookie.price} THB</p>
-
+                    ))
+                ) : (
+                    <p></p>
+                )} 
+                <button className="add-button" onClick={goToCake}>+</button>
+            </div>
+            
+            <h1>Cookies</h1>
+            <div className="cakehome-grid">
+                {cookies.length > 0 ? (
+                    cookies.map((cookie) => (
+                        <div key={cookie.id} className="cake-card"onClick={() => openPopupForm(cookie)}>
+                            <img src={cookie.img} alt={cookie.name_bakery} className="cake-image" />
+                            <p style={{ fontWeight: "bold" }}>{cookie.name_bakery}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Stock: </span>{cookie.quantity}</p>
+                            <p className="cake-price">{cookie.price} THB</p>
                         </div>
-                    ))}
-                    <button className="add-button" onClick={handleAddToCookie}>+</button>
-                </div>
-                
-                <h1>Drink</h1>
-                <div className="menu-grid">
-                    {Drink.map((Drink) => (
-                        <div key={Drink.id} className="menu-card" onClick={() => handleDrinkClick(Drink)}>
-                            <img src={Drink.image_url} alt={Drink.name} className="menu-image" />
-                            <p style={{fontWeight:"bold" }}> {Drink.name}</p>
-                            <p><span style={{fontWeight: "bold"}}></span></p>
-                            <p className="menu-price">{Drink.price} THB</p>
-                        </div>
-                    ))}
-                    <button className="add-button" onClick={handleAddToDrink}>+</button>
-                </div>
+                    ))
+                ) : (
+                    <p></p>
+                )}
+                <button className="add-button" onClick={goToCookie}>+</button>
             </div>
 
-            {/* Pop-up */}
-            {selectedCake && (
-                    <div className="modal" onClick={closeModal}> {/* คลิกพื้นที่ข้างนอกจะปิด pop-up */}
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* หยุดการปิด pop-up เมื่อคลิกใน pop-up */}
-                            <span className="close-button" onClick={closeModal}>&times;</span>
-                            <img src={selectedCake.image_url} alt={selectedCake.name} className="modal-image" />
-                            <h2>{selectedCake.name}</h2>
-                            <p className='stockpop-text'>Stock: {selectedCake.quantity}</p>
-                            <p className='pricepop-text'>Price: {selectedCake.price} THB</p>
-                            <p className='in-text'>Ingredients: <br/>{selectedCake.ingredients}</p>
-
-                            {/* กล่องใส่จำนวนชิ้น */}
-                            <div className="piece-container">
-                            <label htmlFor="piece">Piece:</label>
-                            <input
-                                type="number"
-                                id="piece"
-                                value={piece}
-                                onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
-                                min="1"
-                                max={selectedCake.quantity} // จำกัดไม่ให้เกินจำนวนสต็อก
-                                className="piece-input"
-                            />
-                            </div>
-
-                            {/* กดปุ่มส่งไป Database */}
-                            <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
-                            <button className="order-button">ORDER</button>
+            <h1>Drinks</h1>
+            <div className="cakehome-grid">        
+                {drinks.length > 0 ? (
+                    drinks.map((drink) => (
+                        <div key={drink.id} className="cake-card"onClick={() => openPopupForm(drink)}>
+                            <img src={drink.img} alt={drink.name_bakery} className="cake-image" />
+                            <p style={{ fontWeight: "bold" }}>{drink.name_bakery}</p>
+                            <p><span style={{ fontWeight: "bold" }}>Stock: </span>{drink.quantity}</p>
+                            <p className="cake-price">{drink.price} THB</p>
                         </div>
-                    </div>
+                    ))
+                ) : (
+                    <p></p>
                 )}
-            {selectedCookie && (
-                    <div className="modal" onClick={closeModal}> {/* คลิกพื้นที่ข้างนอกจะปิด pop-up */}
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* หยุดการปิด pop-up เมื่อคลิกใน pop-up */}
-                            <span className="close-button" onClick={closeModal}>&times;</span>
-                            <img src={selectedCookie.image_url} alt={selectedCookie.name} className="modal-image" />
-                            <h2>{selectedCookie.name}</h2>
-                            <p className='stockpop-text'>Stock: {selectedCookie.quantity}</p>
-                            <p className='pricepop-text'>Price: {selectedCookie.price} THB</p>
-                            <p className='in-text'>Ingredients: <br/>{selectedCookie.ingredients}</p>
+                <button className="add-button" onClick={goToDrink}>+</button>
+            </div>        
 
-                            {/* กล่องใส่จำนวนชิ้น */}
-                            <div className="piece-container">
-                            <label htmlFor="piece">Piece:</label>
-                            <input
-                                type="number"
-                                id="piece"
-                                value={piece}
-                                onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
-                                min="1"
-                                max={selectedCookie.quantity} // จำกัดไม่ให้เกินจำนวนสต็อก
-                                className="piece-input"
-                            />
-                            </div>
+            <PopupForm
+                isOpen={isPopOpen}
+                onRequestClose={() => setIsPopOpen(false)}
+                product={selectedProduct}
+                onSave={handleSaveProduct}
+            />
 
-                            {/* กดปุ่มส่งไป Database */}
-                            <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
-                            <button className="order-button">ORDER</button>
-                        </div>
-                    </div>
-                )}
-            {selectedDrink && (
-                    <div className="modal" onClick={closeModal}> {/* คลิกพื้นที่ข้างนอกจะปิด pop-up */}
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* หยุดการปิด pop-up เมื่อคลิกใน pop-up */}
-                            <span className="close-button" onClick={closeModal}>&times;</span>
-                            <img src={selectedDrink.image_url} alt={selectedDrink.name} className="modal-image" />
-                            
-                            <h2>{selectedDrink.name}</h2>
-                            <p className='pricepop-text'>Price: {selectedDrink.price} THB</p>
-                            <p className='in-text'>Ingredients: <br/>{selectedDrink.ingredients}</p>
-                            
-                            {/* กล่องใส่จำนวนชิ้น */}
-                            <div className="piece-container">
-                            <label htmlFor="piece">Piece:</label>
-                            <input
-                                type="number"
-                                id="piece"
-                                value={piece}
-                                onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
-                                min="1"
-                                className="piece-input"
-                            />
-                            </div>
+            <AddProductForm
+                isOpen={isAddFormOpen}
+                onRequestClose={closeAddForm}
+                onSave={handleSavenewProduct}
+            />
 
-                            {/* กดปุ่มส่งไป Database */}
-                            <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
-                            <button className="order-button">ORDER</button>
-                        </div>
-                    </div>
-                )}
-                <ContactSection /> 
+
+            <ContactSection />
         </div>
-
     );
 };
 

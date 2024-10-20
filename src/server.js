@@ -64,6 +64,33 @@ app.get('/api/products_shop/drink', (req, res) => {
     });
 })
 
+//หน้าhome ของหมิว--------------------------------
+app.get('/api/products_shop/cakehome', (req, res) => {
+    con.query('SELECT * FROM products_shop WHERE category = "cake" LIMIT 5', function (err, result, fields) {
+        if (err) throw res.status(400).send("No products found");
+        console.log(result);
+        res.send(result);
+    });
+})
+
+app.get('/api/products_shop/cookiehome', (req, res) => {
+    con.query('SELECT * FROM products_shop WHERE category = "cookie" LIMIT 5', function (err, result, fields) {
+        if (err) throw res.status(400).send("No products found");
+        console.log(result);
+        res.send(result);
+    });
+})
+
+app.get('/api/products_shop/drinkhome', (req, res) => {
+    con.query('SELECT * FROM products_shop WHERE category = "drink"LIMIT 5 ', function (err, result, fields) {
+        if (err) throw res.status(400).send("No products found");
+        console.log(result);
+        res.send(result);
+    });
+})
+
+//---------------------------------------------
+
 //cart
 app.get('/api/products/:id', (req, res) => {
     const id = req.params.id;

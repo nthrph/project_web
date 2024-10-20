@@ -111,7 +111,6 @@ const Cakemenu = () => {
                                     <p style={{ fontWeight: "bold" }}>{cake.name_bakery}</p>
                                     <p><span style={{ fontWeight: "bold" }}>Stock: </span>{cake.quantity}</p>
                                     <p className="cake-price">{cake.price} THB</p>
-                                    {/* <button className="edit-button" onClick={() => openPopupForm(cake)}> <FaEdit /> </button> */}
                                 </div>
                             ))
                         ) : (

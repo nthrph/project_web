@@ -1,111 +1,141 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../shop/StyleMenu.css';
+import '../customer/PopupForm.css';
 import './Menu.css';
-import NavBar_customer from '../customer/NavBar_customer';
-import { FaEdit } from "react-icons/fa";
-import ContactSection from '../shop/ContactSection';
 
-import homescreen from '../../images/drinkscreen.png';
-import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
+import NavBar_customer from '../customer/NavBar_customer';
+import ContactSection from '../shop/ContactSection';
+import PopupForm from '../customer/PopupForm';
+import AddProductForm from '../shop/AddProductForm';
 
 import drinkscreen from '../../images/drinkscreen.png';
+import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
+
 
 
 const Drinkmenu = () => {
-    const [Drink, setDrink] = useState([]);
-    const [selectedDrink, setSelectedDrink] = useState(null); // สำหรับเก็บเค้กที่เลือก
+    const [drinks, setDrinks] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isPopOpen, setIsPopOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
     const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
 
-    const [userName, setUserName] = useState('');
-    const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
+    const URL = "http://localhost:5000";
 
-    // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
     useEffect(() => {
-        axios.get('http://localhost:3001/drink')
+        axios.get(`${URL}/api/products_shop/drink`)
             .then(response => {
-                setDrink(response.data); // เก็บข้อมูลเค้กใน state
+                if (response.data) {
+                    setDrinks(response.data);
+                }
+                setIsLoading(false);
             })
             .catch(error => {
-                console.error('There was an error fetching the drink!', error);
+                console.error("There was an error fetching the drinks!", error);
+                setIsLoading(false);
             });
     }, []);
 
-    // ฟังก์ชันเมื่อกดปุ่ม add
+    const openPopupForm = (drink) => {
+        if (drink) {
+            setSelectedProduct(drink);
+            setIsPopOpen(true);
+        }
+    };
+
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+
+    const openAddForm = () => {
+        setIsAddFormOpen(true);
+    };
+
+    const closeAddForm = () => {
+        setIsAddFormOpen(false);
+    };
+
     const handleAddToHome = () => {
         navigate('/customer/Home'); // นำทางไปยังหน้าตะกร้า
     };
 
-    // ฟังก์ชันสำหรับเลือกเค้กเพื่อแสดง Pop-up
-    const handleDrinkClick = (Drink) => {
-        setSelectedDrink(Drink); // กำหนดเค้กที่เลือก
-    };
 
-   // ฟังก์ชันปิด Pop-up และรีเซ็ตค่า
-    const closeModal = () => {
-        setSelectedDrink(null); // ล้างค่าที่เลือกเมื่อปิด Pop-up
-        setPiece(); // รีเซ็ตค่า piece กลับเป็นค่าเริ่มต้น (1)
-    };
+    const handleSaveProduct = (updatedProduct) => {
+        axios.put(`${URL}/api/updateproduct/${updatedProduct.id}`, updatedProduct)
+            .then((response) => {
+                if (response.data.status === "ok") {
+                    // ตรวจสอบผลลัพธ์ที่ได้รับ
+                    console.log("Updated product successfully:", updatedProduct);
 
-    const handleNameSubmit = () => {
-        axios.post('http://localhost:3001/name', { drinkId: selectedDrink.id, name: userName })
-            .then(response => {
-                console.log(response.data); // ตรวจสอบการตอบกลับจากเซิร์ฟเวอร์
-                setUserName(''); // ล้างกล่องข้อความหลังจากส่ง
-                closeModal(); // ปิด modal หลังจากส่งข้อความ
+                    // ปรับปรุง state ของ drinks ที่นี่
+                    setDrinks(prevDrinks =>
+                        prevDrinks.map(drink =>
+                            drink.id === updatedProduct.id ? { ...drink, ...updatedProduct } : drink
+                        )
+                    );
+                    setIsPopOpen(false); // ปิด Modal
+                }
             })
             .catch(error => {
-                console.error('Error posting name:', error);
+                console.error("Error updating product", error);
             });
     };
-
+    
+    const handleSavenewProduct = (newProduct) => {
+        axios.post(`${URL}/api/addeproduct`, newProduct)
+            .then(response => {
+                if (response.data.status === "ok") {
+                    setDrinks(prevDrinks => [...prevDrinks, response.data.product]);
+                    setIsAddFormOpen(false); // ปิดฟอร์ม
+                }
+            })
+            .catch(error => {
+                console.error("Error adding product", error);
+            });
+    };
+    
     return (
         <div>
             <NavBar_customer />
             <img src={drinkscreen} alt="screen2"style={{ width: '100%', height: '500%' }} />
-            <div className="menu-container">
+            <div className="cake-container">
                 <h1>Drink</h1>
-                <div className="menu-grid">
-                    {Drink.map((Drink) => (
-                        <div key={Drink.id} className="menu-card" onClick={() => handleDrinkClick(Drink)}>
-                            <img src={Drink.image_url} alt={Drink.name} className="menu-image" />
-                            <p style={{fontWeight:"bold" }}> {Drink.name}</p>
-                            <p><span style={{fontWeight: "bold"}}></span></p>
-                            <p className="menu-price">{Drink.price} THB</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <button className="back-button" onClick={handleAddToHome}>Back</button>
-            {/* Pop-up */}
-            {selectedDrink && (
-                    <div className="modal" onClick={closeModal}> {/* คลิกพื้นที่ข้างนอกจะปิด pop-up */}
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* หยุดการปิด pop-up เมื่อคลิกใน pop-up */}
-                            <span className="close-button" onClick={closeModal}>&times;</span>
-                            <img src={selectedDrink.image_url} alt={selectedDrink.name} className="modal-image" />
-                            
-                            <h2>{selectedDrink.name}</h2>
-                            <p className='pricepop-text'>Price: {selectedDrink.price} THB</p>
-                            <p className='in-text'>Ingredients: <br/>{selectedDrink.ingredients}</p>
-
-                            {/* กล่องใส่จำนวนชิ้น */}
-                            <div className="piece-container">
-                            <label htmlFor="piece">Piece:</label>
-                            <input
-                                type="number"
-                                id="piece"
-                                value={piece}
-                                onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
-                                min="1"
-                                className="piece-input"
-                            />
-                            </div>
-
-                            {/* กดปุ่มส่งไป Database */}
-                            <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
-                            <button className="order-button">ORDER</button>
-                        </div>
+                {isLoading ? (
+                    <p>Loading drinks...</p>
+                ) : (
+                    <div className="cake-grid">
+                        {drinks.length > 0 ? (
+                            drinks.map((drink) => (
+                                <div key={drink.id} className="cake-card"onClick={() => openPopupForm(drink)}>
+                                    <img src={drink.img} alt={drink.name_bakery} className="cake-image" />
+                                    <p style={{ fontWeight: "bold" }}>{drink.name_bakery}</p>
+                                    <p><span style={{ fontWeight: "bold" }}>Stock: </span>{drink.quantity}</p>
+                                    <p className="cake-price">{drink.price} THB</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No drinks available.</p>
+                        )}
                     </div>
                 )}
+                <button className="back-button" onClick={handleAddToHome}>Back</button>
+
+            </div>
+
+            <PopupForm
+                isOpen={isPopOpen}
+                onRequestClose={() => setIsPopOpen(false)}
+                product={selectedProduct}
+                onSave={handleSaveProduct}
+            />
+
+            <AddProductForm
+                isOpen={isAddFormOpen}
+                onRequestClose={closeAddForm}
+                onSave={handleSavenewProduct}
+            />
+
+
             <ContactSection />
         </div>
     );

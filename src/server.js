@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 
 // MySQL connection
 var con = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "root",
     password: "123456",
     port: "3306",
@@ -64,6 +64,7 @@ app.get('/api/products_shop/drink', (req, res) => {
     });
 })
 
+//cart
 app.get('/api/products/:id', (req, res) => {
     const id = req.params.id;
     con.query("SELECT * FROM products_shop WHERE id = ?", [id], function (err, result, fields) {
@@ -78,6 +79,8 @@ app.get('/api/products/:id', (req, res) => {
         res.send(result);
     });
 });
+
+
 // update products
 app.put('/api/updateproduct/:id', (req, res) => {
     const id = req.params.id;

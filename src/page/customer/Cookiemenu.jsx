@@ -1,125 +1,142 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../shop/StyleMenu.css';
+import '../customer/PopupForm.css';
 import './Menu.css';
-import NavBar_customer from '../customer/NavBar_customer';
-import { FaEdit } from "react-icons/fa";
-import ContactSection from '../shop/ContactSection';
 
-import homescreen from '../../images/cookiescreen.png';
-import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
+import NavBar_customer from '../customer/NavBar_customer';
+import ContactSection from '../shop/ContactSection';
+import PopupForm from '../customer/PopupForm';
+import AddProductForm from '../shop/AddProductForm';
 
 import cookiescreen from '../../images/cookiescreen.png';
+import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำหรับนำทาง
 
 
 
 const Cookiemenu = () => {
-    const [Cookie, setCookies] = useState([]);
-    const [selectedCookie, setSelectedCookie] = useState(null); // สำหรับเก็บเค้กที่เลือก
+    const [cookies, setCookies] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isPopOpen, setIsPopOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
     const navigate = useNavigate(); // สร้างฟังก์ชัน navigate
 
-    const [userName, setUserName] = useState('');
-    const [piece, setPiece] = useState(''); // สร้าง state สำหรับเก็บจำนวนสินค้า
+    const URL = "http://localhost:5000";
 
-
-    // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
     useEffect(() => {
-        axios.get('http://localhost:3001/cookie')
+        axios.get(`${URL}/api/products_shop/cookie`)
             .then(response => {
-                setCookies(response.data); // เก็บข้อมูลเค้กใน state
+                if (response.data) {
+                    setCookies(response.data);
+                }
+                setIsLoading(false);
             })
             .catch(error => {
-                console.error('There was an error fetching the cookie!', error);
+                console.error("There was an error fetching the cookies!", error);
+                setIsLoading(false);
             });
     }, []);
 
-    // ฟังก์ชันเมื่อกดปุ่ม add
+    const openPopupForm = (cookie) => {
+        if (cookie) {
+            setSelectedProduct(cookie);
+            setIsPopOpen(true);
+        }
+    };
+
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+
+    const openAddForm = () => {
+        setIsAddFormOpen(true);
+    };
+
+    const closeAddForm = () => {
+        setIsAddFormOpen(false);
+    };
+
     const handleAddToHome = () => {
         navigate('/customer/Home'); // นำทางไปยังหน้าตะกร้า
     };
-    // const handleAddToCart = () => {
-    //     navigate('/customer/Cart'); // นำทางไปยังหน้าตะกร้า
-    // };
-    // const handleAddToOrder = () => {
-    //     navigate('/customer/Order'); // นำทางไปยังหน้าตะกร้า
-    // };
-    
-    // ฟังก์ชันสำหรับเลือกเค้กเพื่อแสดง Pop-up
-    const handleCookieClick = (Cookie) => {
-        setSelectedCookie(Cookie); // กำหนดเค้กที่เลือก
-    };
 
-    // ฟังก์ชันสำหรับปิด Pop-up
-    const closeModal = () => {
-        setSelectedCookie(null); // ล้างเค้กที่เลือกเมื่อปิด
-        setPiece(); // รีเซ็ตค่า piece กลับเป็นค่าเริ่มต้น
-    };
-    
-    //ส่งชื่อที่ผู้ใช้ป้อนไปยังเซิร์ฟเวอร์:
-    const handleNameSubmit = () => {
-        axios.post('http://localhost:3001/name', { cookieId: selectedCookie.id, name: userName })
-            .then(response => {
-                console.log(response.data); // ตรวจสอบการตอบกลับจากเซิร์ฟเวอร์
-                setUserName(''); // ล้างกล่องข้อความหลังจากส่ง
-                closeModal(); // ปิด modal หลังจากส่งข้อความ
+
+    const handleSaveProduct = (updatedProduct) => {
+        axios.put(`${URL}/api/updateproduct/${updatedProduct.id}`, updatedProduct)
+            .then((response) => {
+                if (response.data.status === "ok") {
+                    // ตรวจสอบผลลัพธ์ที่ได้รับ
+                    console.log("Updated product successfully:", updatedProduct);
+
+                    // ปรับปรุง state ของ cakes ที่นี่
+                    setCookies(prevCookies =>
+                        prevCookies.map(cookie =>
+                            cookie.id === updatedProduct.id ? { ...cookie, ...updatedProduct } : cookie
+                        )
+                    );
+                    setIsPopOpen(false); // ปิด Modal
+                }
             })
             .catch(error => {
-                console.error('Error posting name:', error);
+                console.error("Error updating product", error);
             });
     };
     
-
+    const handleSavenewProduct = (newProduct) => {
+        axios.post(`${URL}/api/addeproduct`, newProduct)
+            .then(response => {
+                if (response.data.status === "ok") {
+                    setCookies(prevCookies => [...prevCookies, response.data.product]);
+                    setIsAddFormOpen(false); // ปิดฟอร์ม
+                }
+            })
+            .catch(error => {
+                console.error("Error adding product", error);
+            });
+    };
+    
     return (
         <div>
             <NavBar_customer />
             <img src={cookiescreen} alt="screen2"style={{ width: '100%', height: '500%' }} />
-            <div className="menu-container">
-                <h1>Cookie</h1>
-                <div className="menu-grid">
-                    {Cookie.map((Cookie) => (
-                        <div key={Cookie.id} className="menu-card" onClick={() => handleCookieClick(Cookie)}>
-                            <img src={Cookie.image_url} alt={Cookie.name} className="menu-image" />
-                            <p style={{fontWeight:"bold" }}> {Cookie.name}</p>
-                            <p><span style={{fontWeight: "bold"}}>Stock : </span>{Cookie.quantity}</p>
-                            <p className="menu-price">{Cookie.price} THB</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <button className="back-button" onClick={handleAddToHome}>Back</button>
-
-            {/* Pop-up */}
-            {selectedCookie && (
-                    <div className="modal" onClick={closeModal}> {/* คลิกพื้นที่ข้างนอกจะปิด pop-up */}
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* หยุดการปิด pop-up เมื่อคลิกใน pop-up */}
-                            <span className="close-button" onClick={closeModal}>&times;</span>
-                            <img src={selectedCookie.image_url} alt={selectedCookie.name} className="modal-image" />
-                            
-                            <h2>{selectedCookie.name}</h2>
-                            <p className='stockpop-text'>Stock: {selectedCookie.quantity}</p>
-                            <p className='pricepop-text'>Price: {selectedCookie.price} THB</p>
-                            <p className='in-text'>Ingredients: <br/>{selectedCookie.ingredients}</p>
-
-
-                            {/* กล่องใส่จำนวนชิ้น */}
-                            <div className="piece-container">
-                            <label htmlFor="piece">Piece:</label>
-                            <input
-                                type="number"
-                                id="piece"
-                                value={piece}
-                                onChange={(e) => setPiece(e.target.value)} // เก็บค่าเมื่อผู้ใช้เปลี่ยน
-                                min="1"
-                                max={selectedCookie.quantity} // จำกัดไม่ให้เกินจำนวนสต็อก
-                                className="piece-input"
-                            />
-                            </div>
-
-                            {/* กดปุ่มส่งไป Database */}
-                            <button className="addcart-button" onClick={handleNameSubmit}>ADD TO CART</button>
-                            <button className="order-button">ORDER</button>
-                        </div>
+            <div className="cake-container">
+                <h1>Cookies</h1>
+                {isLoading ? (
+                    <p>Loading cakes...</p>
+                ) : (
+                    <div className="cake-grid">
+                        {cookies.length > 0 ? (
+                            cookies.map((cookie) => (
+                                <div key={cookie.id} className="cake-card"onClick={() => openPopupForm(cookie)}>
+                                    <img src={cookie.img} alt={cookie.name_bakery} className="cake-image" />
+                                    <p style={{ fontWeight: "bold" }}>{cookie.name_bakery}</p>
+                                    <p><span style={{ fontWeight: "bold" }}>Stock: </span>{cookie.quantity}</p>
+                                    <p className="cake-price">{cookie.price} THB</p>
+                                    {/* <button className="edit-button" onClick={() => openPopupForm(cake)}> <FaEdit /> </button> */}
+                                </div>
+                            ))
+                        ) : (
+                            <p>No cookies available.</p>
+                        )}
                     </div>
                 )}
+                <button className="back-button" onClick={handleAddToHome}>Back</button>
+
+            </div>
+
+            <PopupForm
+                isOpen={isPopOpen}
+                onRequestClose={() => setIsPopOpen(false)}
+                product={selectedProduct}
+                onSave={handleSaveProduct}
+            />
+
+            <AddProductForm
+                isOpen={isAddFormOpen}
+                onRequestClose={closeAddForm}
+                onSave={handleSavenewProduct}
+            />
+
+
             <ContactSection />
         </div>
     );

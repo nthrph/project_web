@@ -166,6 +166,80 @@ app.post('/api/addcart', (req, res) => {
     });
 });
 
+app.post('/api/addcart', (req, res) => {
+    const { name_customer, tel,name_menu, quantity, price, note} = req.body;
+    con.query('INSERT INTO customer (name_customer,tel,name_menu, quantity, price, note, status) VALUES (?,?, ?, ?, ?, ?, "wait")', 
+    [name_customer,tel, name_menu, quantity, price, note], function (err, result) {
+        if (err) return res.status(500).send(`Error inserting product: ${err.message}`);
+        res.send({ status: "ok" });
+    });
+});
+
+app.get('/menu', (req, res) => {
+    let sql = 'SELECT * FROM menu';
+    con.query(sql, (err, result) => {  // เปลี่ยนจาก db เป็น con
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.delete('/menu/delete/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM menu WHERE id = ?';
+    con.query(sql, [id], (err, result) => {  // เปลี่ยนจาก db เป็น con
+        if (err) {
+            console.error('Error deleting item:', err);
+            return res.status(500).send({ message: 'Error deleting item' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send({ message: 'Item not found' });
+        }
+
+        res.status(200).send({ message: 'Item deleted successfully' });
+    });
+});
+app.post('/menu/save', (req, res) => {
+    const { name, price, ingredients, piece, img_url } = req.body;
+
+    // Check if the menu item with the same name exists
+    con.query('SELECT * FROM menu WHERE name = ?', [name], function (err, results) {
+        if (err) return res.status(500).send(`Error checking menu item: ${err.message}`);
+        
+        if (results.length > 0) {
+            // If the item exists, update the quantity by adding the new piece value
+            con.query(
+                'UPDATE menu SET price = ?, ingredients = ?, piece = piece + ?, img_url = ? WHERE name = ?',
+                [price, ingredients, piece, img_url, name],
+                function (err, result) {
+                    if (err) return res.status(500).send(`Error updating menu item: ${err.message}`);
+                    res.send({ status: "ok", message: "Menu item updated" });
+                }
+            );
+        } else {
+            // If the item does not exist, insert a new one
+            con.query(
+                'INSERT INTO menu (name, price, ingredients, piece, img_url) VALUES (?, ?, ?, ?, ?)',
+                [name, price, ingredients, piece, img_url],
+                function (err, result) {
+                    if (err) return res.status(500).send(`Error inserting product: ${err.message}`);
+                    res.send({ status: "ok", message: "Menu item inserted" });
+                }
+            );
+        }
+    });
+});
+
+
+app.post('/menu/update-stock', (req, res) => {
+    const { id, newStock } = req.body;
+
+    con.query('UPDATE products_shop SET quantity = ? WHERE id = ?', [newStock, id], function (err, result) {
+        if (err) return res.status(500).send(`Error updating stock: ${err.message}`);
+        res.send({ status: "ok" });
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

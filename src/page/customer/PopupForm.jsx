@@ -1,31 +1,58 @@
 import React, { useState, useEffect } from 'react'; 
 import Modal from 'react-modal';
+import axios from 'axios'; 
 import './PopupForm.css'; 
 
 Modal.setAppElement('#root');
 
 const PopupForm = ({ isOpen, onRequestClose, product, onSave }) => { 
-    const [quantity, setQuantity] = useState(1); // เก็บจำนวนสินค้าที่ผู้ใช้เลือก
+    const [quantity, setQuantity] = useState(1); // Track the selected quantity
 
     useEffect(() => {
         if (product) {
-            setQuantity(1); // รีเซ็ตค่าเริ่มต้นเป็น 1 ทุกครั้งที่เปลี่ยนสินค้า
+            setQuantity(1); // Reset to 1 each time a new product is selected
         }
     }, [product]);
 
-    function handleSave() {
-        if (!product) return; 
+    async function handleSave() {
+        if (!product) return;
+    
+        // Check if the quantity exceeds stock
+        if (quantity > product.quantity) {
+            alert('The quantity exceeds the available stock. Please enter a valid amount.');
+            return;
+        }
+    
         const updatedProduct = {
-            id: product.id,
-            name_bakery: product.name_bakery,
+            name: product.name_bakery,
+            ingredients: product.ingredients,
             price: product.price,
-            quantity, // จำนวนสินค้าที่ผู้ใช้เลือก
-            img: product.img
+            piece: quantity,
+            img_url: product.img
         };
-        onSave(updatedProduct); // ส่งข้อมูลไปยังฟังก์ชัน onSave
-        onRequestClose(); // ปิด Modal
+    
+        try {
+            // Send data to the backend to add the product to the cart
+            await axios.post('http://localhost:5000/menu/save', updatedProduct);
+            
+            // Deduct the quantity from the stock on the frontend
+            const newStock = product.quantity - quantity;
+            product.quantity = newStock;
+    
+            // Update stock in the backend
+            await axios.post('http://localhost:5000/menu/update-stock', {
+                id: product.id,
+                newStock: newStock
+            });
+    
+            onSave(updatedProduct);
+    
+            onRequestClose();  
+        } catch (error) {
+            console.error('Error saving product to the database', error);
+        }
     }
-
+    
     return (
         <Modal
             isOpen={isOpen}
@@ -52,7 +79,7 @@ const PopupForm = ({ isOpen, onRequestClose, product, onSave }) => {
                             min="0" 
                             max={product?.quantity || 1} 
                             value={quantity} 
-                            onChange={(e) => setQuantity(e.target.value)} 
+                            onChange={(e) => setQuantity(parseInt(e.target.value))} 
                         />
 
                         <div className="form-actions">

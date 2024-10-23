@@ -1,9 +1,10 @@
-import './AddProductForm.css'; // ใส่ CSS สำหรับจัดสไตล์
 import React, { useState, useRef } from 'react';
 import Modal from 'react-modal';
+import './AddMenuForm.css';
+
 Modal.setAppElement('#root');
 
-    const AddProductForm = ({ isOpen, onRequestClose, onSave }) => {
+const AddMenuForm = ({ isOpen, onRequestClose, onSave }) => {
     const nameRef = useRef();
     const priceRef = useRef();
     const stockRef = useRef();
@@ -13,19 +14,18 @@ Modal.setAppElement('#root');
 
     function handleSave() {
         const newProduct = {
-            name: nameRef.current.value,  // แก้ไขเป็น name แทน name_bakery
-            category,
+            name_bakery: nameRef.current.value,
+            category: category,  // ตรวจสอบว่า category ถูกส่งอย่างถูกต้อง
             ingredients: ingredientsRef.current.value,
             price: priceRef.current.value,
-            quantity: stockRef.current.value,
+            quantity: stockRef.current.value ? parseInt(stockRef.current.value) : 0,
             img: imgRef.current.value,
         };
-        
-        console.log(newProduct);
+        console.log(newProduct);  // ตรวจสอบค่า category ใน console
         onSave(newProduct);
         onRequestClose();
     }
-
+    
     return (
         <Modal
             isOpen={isOpen}
@@ -46,6 +46,7 @@ Modal.setAppElement('#root');
                         <label>Stock:</label>
                         <input type="number" ref={stockRef} placeholder="Enter stock quantity" />
 
+
                         <label>Price (THB):</label>
                         <input type="number" ref={priceRef} placeholder="Enter price" />
 
@@ -60,6 +61,7 @@ Modal.setAppElement('#root');
                             <option value="Other">Other</option>
                         </select>
 
+
                         <div className="form-actions">
                             <button className="save-button" onClick={handleSave}>SAVE</button>
                             <button className="cancel-button" onClick={onRequestClose}>CANCEL</button>
@@ -71,4 +73,4 @@ Modal.setAppElement('#root');
     );
 };
 
-export default AddProductForm;
+export default AddMenuForm;

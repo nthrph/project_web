@@ -134,10 +134,10 @@ label {
 input[type="text"],
 input[type="number"],
 textarea {
-    width: 100%;
+    width: 25%;
     padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: 1px solid #e1641b;
+    border-radius: 5px;
     font-size: 14px;
 }
 

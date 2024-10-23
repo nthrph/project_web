@@ -1,50 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import './StyleMenu.css';
-// import NavBar_component from './NavBar_component';
-// import { FaEdit } from "react-icons/fa";
-// import ContactSection from './ContactSection';
-
-// const DrinkList = () => {
-//     const [Drink, setDrink] = useState([]);
-
-//     // ดึงข้อมูลเค้กจาก API เมื่อ component ทำงาน
-//     useEffect(() => {
-//         axios.get('http://localhost:5000/api/products_shop/drink')
-//             .then(response => {
-//                 setDrink(response.data); // เก็บข้อมูลเค้กใน state
-//             })
-//             .catch(error => {
-//                 console.error('There was an error fetching the drink!', error);
-//             });
-//     }, []);
-
-//     return (
-//         <div>
-//             <NavBar_component />
-
-//             <div className="cake-container">
-
-//                 <h1>Drink</h1>
-//                 <div className="cake-grid">
-//                     {Drink.map((Drink) => (
-//                         <div key={Drink.id} className="cake-card">
-//                             <img src={Drink.img} alt={Drink.name_bakery} className="cake-image" />
-//                             <p>Name: {Drink.name_bakery}</p>
-//                             <p className="cake-price">{Drink.price} THB</p>
-//                             <button className="edit-button"><FaEdit /></button>
-//                         </div>
-//                     ))}
-//                 </div>
-//                 <button className="add-button">+</button>
-//             </div>
-//             <ContactSection />
-//         </div>
-//     );
-// };
-
-// export default DrinkList;
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './StyleMenu.css';
@@ -55,13 +8,15 @@ import EditForm from './EditForm';
 import AddProductForm from './AddProductForm';
 
 const DrinkList = () => {
-    const [drinks, setDrinks] = useState([]);
+    const [drink, setDrinks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
 
     const URL = "http://localhost:5000";
 
+    // โหลดข้อมูลเค้กจากฐานข้อมูล
     useEffect(() => {
         axios.get(`${URL}/api/products_shop/drink`)
             .then(response => {
@@ -71,11 +26,12 @@ const DrinkList = () => {
                 setIsLoading(false);
             })
             .catch(error => {
-                console.error("There was an error fetching the drinks!", error);
+                console.error("There was an error fetching the drink!", error);
                 setIsLoading(false);
             });
     }, []);
 
+    // เปิดฟอร์มแก้ไข
     const openEditForm = (drink) => {
         if (drink) {
             setSelectedProduct(drink);
@@ -83,23 +39,23 @@ const DrinkList = () => {
         }
     };
 
-    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
-
+    // เปิดฟอร์มเพิ่มสินค้า
     const openAddForm = () => {
         setIsAddFormOpen(true);
     };
 
+    // ปิดฟอร์มเพิ่มสินค้า
     const closeAddForm = () => {
         setIsAddFormOpen(false);
     };
 
+    // ฟังก์ชันสำหรับบันทึกสินค้าที่แก้ไข
     const handleSaveProduct = (updatedProduct) => {
         axios.put(`${URL}/api/updateproduct/${updatedProduct.id}`, updatedProduct)
             .then((response) => {
                 if (response.data.status === "ok") {
-                    console.log("Updated product successfully:", updatedProduct);
-                    setDrinks(prevDrinks =>
-                        prevDrinks.map(drink =>
+                    setDrinks(prevCakes =>
+                        prevCakes.map(drink =>
                             drink.id === updatedProduct.id ? { ...drink, ...updatedProduct } : drink
                         )
                     );
@@ -110,31 +66,43 @@ const DrinkList = () => {
                 console.error("Error updating product", error);
             });
     };
-    
-    const handleSavenewProduct = (newProduct) => {
-        axios.post(`${URL}/api/addeproduct`, newProduct)
-            .then(response => {
-                if (response.data.status === "ok") {
-                    setDrinks(prevDrinks => [...prevDrinks, response.data.product]);
-                    setIsAddFormOpen(false); // ปิดฟอร์ม
-                }
-            })
-            .catch(error => {
-                console.error("Error adding product", error);
-            });
-    };
 
+    // ฟังก์ชันสำหรับบันทึกสินค้าที่เพิ่มใหม่
+    const handleSavenewProduct = (newProduct) => {
+        console.log("Data sent to backend:", newProduct);  // ตรวจสอบว่า category ถูกส่งไปจริง
+        axios.post(`${URL}/api/addproduct`, {
+            name_bakery: newProduct.name,
+            category: newProduct.category,  // ตรวจสอบว่า category ถูกส่งไป
+            ingredients: newProduct.ingredients,
+            price: newProduct.price,
+            quantity: newProduct.quantity,
+            img: newProduct.img
+        })
+        .then(response => {
+            if (response.data.status === "ok") {
+                setDrinks(prevCakes => [...prevCakes, response.data.product]);
+                setIsAddFormOpen(false);  // ปิดฟอร์ม
+            } else {
+                alert("Failed to add product. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.error("Error adding product", error);
+            alert("An error occurred while adding the product.");
+        });
+    };
+    
     return (
         <div>
             <NavBar_component />
             <div className="cake-container">
-                <h1>Drinks</h1>
+                <h1>Drink</h1>
                 {isLoading ? (
-                    <p>Loading drinks...</p>
+                    <p>Loading cakes...</p>
                 ) : (
                     <div className="cake-grid">
-                        {drinks.length > 0 ? (
-                            drinks.map((drink) => (
+                        {drink.length > 0 ? (
+                            drink.map((drink) => (
                                 <div key={drink.id} className="cake-card">
                                     <img src={drink.img} alt={drink.name_bakery} className="cake-image" />
                                     <p style={{ fontWeight: "bold" }}>{drink.name_bakery}</p>
@@ -144,13 +112,14 @@ const DrinkList = () => {
                                 </div>
                             ))
                         ) : (
-                            <p>No drinks available.</p>
+                            <p>No drink available.</p>
                         )}
                     </div>
                 )}
                 <button className="add-button" onClick={openAddForm}>+</button>
             </div>
 
+            {/* Modal สำหรับแก้ไขสินค้า */}
             <EditForm
                 isOpen={isEditOpen}
                 onRequestClose={() => setIsEditOpen(false)}
@@ -158,6 +127,7 @@ const DrinkList = () => {
                 onSave={handleSaveProduct}
             />
 
+            {/* Modal สำหรับเพิ่มสินค้าใหม่ */}
             <AddProductForm
                 isOpen={isAddFormOpen}
                 onRequestClose={closeAddForm}

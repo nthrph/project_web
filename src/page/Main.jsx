@@ -1,173 +1,105 @@
-import React, { useState } from 'react';
-import { FaEdit, FaHome, FaShoppingCart } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // นำเข้า useNavigate สำหรับการนำทาง
-import mainscreen from '../images/mainscreen.png'; // นำเข้ารูปภาพ
-import './Main.css'; // นำเข้าไฟล์ CSS
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import './Main.css';
 
 const Main = () => {
-    const [Name, setName] = useState('');
-    const [Phone, setPhone] = useState('');
-    const [selectedLogin, setSelectedLogin] = useState(false);
-    const navigate = useNavigate();
+  const [showForm, setShowForm] = useState(false);
+  const [name, setName] = useState('');
+  const [tel, setTel] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
-    const handleShoppingClick = () => {
-        setSelectedLogin(true);
-    };
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleShoppingClick = () => {
+    setShowForm(true);
+  };
 
-        if (Name.trim() === '') {
-            alert('Please Enter your Name');
-            return;
-        }
-        if (Phone.trim() === '') {
-            alert('Please Enter your Phone Number');
-            return;
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        console.log('ข้อมูลที่ถูกส่ง:', Name, Phone);
-        navigate('/customer/Home');
-    };
+    // ตรวจสอบว่ากรอกข้อมูลครบถ้วนหรือไม่
+    if (name.trim() === "" || tel.trim() === "") {
+      setErrorMessage("Please fill in both fields.");
+      return;
+    }
 
-    const closeModal = () => {
-        setSelectedLogin(false);
-        setName('');
-    };
+    // ล้างข้อความแจ้งเตือน
+    setErrorMessage('');
 
-    const handleStoreClick = () => {
-        navigate('/shop/Cake');
-    };
-    return (
-        <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
-            {/* ภาพที่ใช้เป็นพื้นหลัง */}
-            <img 
-                src={mainscreen} 
-                alt="screen2" 
-                className="background-img" 
-            />
+    // ส่งข้อมูลไปยัง API
+    try {
+      const response = await fetch("http://localhost:5000/api/addcart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name_customer: name, tel: tel })
+      });
 
-            {/* ปุ่ม Shopping */}
-            <button 
-                className="shopping-button"
-                onClick={handleShoppingClick}
-            >
-                <FaShoppingCart /> Shopping
-            </button>
+      const result = await response.json();
+      if (response.ok) {
+        setSuccessMessage("Data added successfully!");
+        // นำทางไปยัง path /customer/Home
+        navigate("/customer/Home");
+      } else {
+        setErrorMessage(`Failed to submit: ${result.message}`);
+      }
+    } catch (error) {
+      setErrorMessage(`Error: ${error.message}`);
+    }
+  };
 
-            {/* ปุ่ม Store */}
-            <button 
-                className="store-button"
-                onClick={handleStoreClick}
-            >
-                <FaHome /> Store
-            </button>
+  const handleStoreClick = () => {
+    navigate("/shop/Cake");
+  };
 
-            {/* Pop-up */}
-            {selectedLogin && (
-                <div className="modal" onClick={closeModal}>
-                    <div className="modal-contentM" onClick={(e) => e.stopPropagation()}>
-                        <span className="close-button" onClick={closeModal}>&times;</span>
-                        
-                        {/* ฟอร์มสำหรับกรอก */}
-                        <form onSubmit={handleSubmit}>
-                            <h1> Contact</h1>
-                            <label htmlFor="name">Name : </label>
-                            <input 
-                                type="text" 
-                                id="name" 
-                                value={Name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Enter your Name"
-                            /><br/>
+  return (
+    <div className="background-image">
+      <div className="main-container">
+        <h1>La Belle Boulangerie</h1>
+        {!showForm && (
+          <button className="shopping-button" onClick={handleShoppingClick}>
+            Shopping
+          </button>
+        )}
 
-                            <label htmlFor="phone">Tel : </label>
-                            <input 
-                                type="text" 
-                                id="phone" 
-                                value={Phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                placeholder="Enter your Phone Number"
-                            />
-                            
-                            {/* ปุ่ม Submit */}
-                            <button type="submit">
-                                Submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+        {showForm && (
+          <div className="form-container">
+            <h2>Contact</h2>
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="name">Name:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              /><br />
+              <label htmlFor="tel">Tel:</label><br />
+              <input
+                type="text"
+                id="tel"
+                name="tel"
+                placeholder="Enter your phone number"
+                value={tel}
+                onChange={(e) => setTel(e.target.value)}
+              /><br />
+              {/* แสดงข้อความเตือนหากกรอกข้อมูลไม่ครบ */}
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
+              {successMessage && <p className="success-message">{successMessage}</p>}
+              <button className="submit-button" type="submit">SUBMIT</button>
+            </form>
+          </div>
+        )}
+      </div>
+
+      {/* ปุ่ม Store ที่มุมซ้ายล่าง */}
+      <button className="store-button" onClick={handleStoreClick}>
+        Store
+      </button>
+    </div>
+  );
 };
 
 export default Main;
-//     return (
-//         <div style={{ position: 'relative', width: '100%', height: '100vh' }}> {/* ตั้ง height เป็น 100vh เพื่อให้เต็มหน้าจอ */}
-//             {/* ภาพที่ใช้เป็นพื้นหลัง */}
-//             <img 
-//                 src={mainscreen} 
-//                 alt="screen2" 
-//                 style={{ 
-//                     width: '100%', 
-//                     height: '100%', 
-//                     objectFit: 'cover', 
-//                     position: 'absolute',
-//                     top: 0,
-//                     left: 0
-//                 }} 
-//             />
-
-//             {/* ปุ่มที่ทับบนภาพ */}
-//             <button 
-//                 style={{ 
-//                     position: 'absolute', 
-//                     top: '50%', 
-//                     left: '50%', 
-//                     transform: 'translate(-50%, -50%)', 
-//                     padding: '10px 20px', 
-//                     fontSize: '32px',
-//                     backgroundColor: '#885035', 
-//                     color: 'white', 
-//                     border: 'none', 
-//                     borderRadius: '5px',
-//                     cursor: 'pointer'
-//                 }}
-//                 onClick={handleShoppingClick} // เพิ่ม onClick เพื่อเรียกฟังก์ชัน handleShoppingClick
-//             >
-//                 <FaShoppingCart /> Shopping
-//             </button>
-
-//             <button 
-//                 style={{ 
-//                     position: 'absolute', 
-//                     top: '90%', 
-//                     left: '10%', 
-//                     transform: 'translate(-50%, -50%)', 
-//                     padding: '10px 20px', 
-//                     fontSize: '32px',
-//                     backgroundColor: '#565B3C', 
-//                     color: 'white', 
-//                     border: 'none', 
-//                     borderRadius: '5px',
-//                     cursor: 'pointer'
-//                 }}
-//                 onClick={handleStoreClick} // เพิ่ม onClick เพื่อเรียกฟังก์ชัน handleStoreClick
-//             >
-//                 <FaHome /> Store
-//             </button>
-
-//             {/* Pop-up */}
-//             {selectedLogin && (
-//                     <div className="modal" onClick={closeModal}> {/* คลิกพื้นที่ข้างนอกจะปิด pop-up */}
-//                         <div className="modal-content" onClick={(e) => e.stopPropagation()}> {/* หยุดการปิด pop-up เมื่อคลิกใน pop-up */}
-//                             <span className="close-button" onClick={closeModal}>&times;</span>
-//                         </div>
-//                     </div>
-//                 )}
-
-//         </div>
-//     );
-// };
-
-// export default Main;

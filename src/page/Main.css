@@ -1,102 +1,111 @@
-/* Main.css */
-
-/* สไตล์สำหรับ background image */
-.background-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.h1 {
-    text-size-adjust: 18px;
-    font-weight: bold;
-  }
-  
-/* สไตล์สำหรับปุ่ม Shopping */
-.shopping-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px 20px;
-    font-size: 32px;
-    background-color: #885035;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* สไตล์สำหรับปุ่ม Store */
-.store-button {
-    position: absolute;
-    top: 90%;
-    left: 10%;
-    transform: translate(-50%, -50%);
-    padding: 10px 20px;
-    font-size: 32px;
-    background-color: #565B3C;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* สไตล์สำหรับ pop-up */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* ทำให้พื้นหลังโปร่งใส */
+/* จัดการพื้นหลังให้เหมือนในรูป */
+.background-image {
+    background-image: url('../images/mainscreen.png');
+    /* ใส่ URL ของภาพพื้นหลัง */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-}
-
-.modal-contentM {
-    background-color: #FDDEC2;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-    text-align: center;
+    align-items: center;
     position: relative;
 }
 
-/* ปุ่มปิด Pop-up */
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
+.main-container {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 50px 150px;
+    border-radius: 10px;
 }
 
-/* สไตล์สำหรับฟอร์มและ input */
-form {
+.shopping-button,
+.submit-button {
+    background-color: #A0522D;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.shopping-button:hover,
+.submit-button:hover {
+    background-color: #8B4513;
+}
+
+.form-container {
+    background-color: #F5DEB3;
+    padding: 10px;
+    /* ลดขนาด Padding ลงเพื่อให้เนื้อที่กว้างขึ้น */
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin-top: 20px;
+    width: 100%;
+    /* กำหนดความกว้างของคอนเทนเนอร์ให้เต็ม */
+    max-width: 500px;
+    /* คุณสามารถปรับขนาดนี้ตามต้องการ */
 }
 
 input[type="text"] {
-    width: 70%;
     padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    /* กำหนดให้กล่องข้อความเต็มพื้นที่ */
     font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+
+
+
+label {
+    font-size: 18px;
+    color: #333;
+}
+
+.submit-button {
     margin-top: 10px;
-    border: 1px solid #ddd;
+}
+
+/* ปุ่ม Store ที่มุมซ้ายล่าง */
+.store-button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: #556B2F;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
     border-radius: 5px;
 }
 
-button[type="submit"] {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #8A4C23;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.store-button:hover {
+    background-color: #6B8E23;
+}
+
+/* สไตล์สำหรับข้อความแจ้งเตือน */
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* สไตล์สำหรับข้อความแจ้งเตือน */
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* สไตล์สำหรับข้อความแจ้งว่าเพิ่มข้อมูลสำเร็จ */
+.success-message {
+    color: green;
+    margin-top: 10px;
+    font-size: 14px;
 }

@@ -1,37 +1,40 @@
-import React, { useState, useRef, useEffect } from 'react'; // เพิ่ม useEffect ที่นี่
+import React, { useState, useRef, useEffect } from 'react'; 
 import Modal from 'react-modal';
-import './EditForm.css'; // ไฟล์ CSS สำหรับจัดรูปแบบฟอร์ม
+import './EditForm.css'; 
 
-Modal.setAppElement('#root'); // กำหนด root element สำหรับ Modal
+Modal.setAppElement('#root');
 
-const EditForm = ({ isOpen, onRequestClose, product, onSave }) => { // เพิ่ม onSave ใน props
+const EditForm = ({ isOpen, onRequestClose, product, onSave }) => { 
     const nameRef = useRef();
     const priceRef = useRef();
     const stockRef = useRef();
-    const ingredientsRef = useRef(); // เพิ่ม ingredientsRef
-    const [category, setCategory] = useState('Cake'); // ตั้งค่าเริ่มต้นเป็น 'Cake'
+    const ingredientsRef = useRef();
+    const [category, setCategory] = useState('Cake'); 
 
-    // ใช้ useEffect เพื่ออัปเดต category เมื่อ product เปลี่ยนแปลง
     useEffect(() => {
         if (product) {
-            setCategory(product.category || 'Cake'); // กำหนด category จาก product หากมี
+            setCategory(product.category || 'Cake');
+            if (nameRef.current) nameRef.current.value = product.name_bakery || "";
+            if (priceRef.current) priceRef.current.value = product.price || "";
+            if (stockRef.current) stockRef.current.value = product.quantity || "";
+            if (ingredientsRef.current) ingredientsRef.current.value = product.ingredients || "";
         }
     }, [product]);
 
     function handleSave() {
-        if (!product) return; // ถ้า product เป็น null จะไม่ทำอะไร
+        if (!product) return; 
         const updatedProduct = {
-            id: product.id, // ต้องส่ง ID ของผลิตภัณฑ์
+            id: product.id,
             name_bakery: nameRef.current.value,
             category,
-            ingredients: ingredientsRef.current.value, // ใช้ ingredientsRef
+            ingredients: ingredientsRef.current.value,
             price: priceRef.current.value,
             quantity: stockRef.current.value,
-            img: product.img // หรือให้ผู้ใช้เปลี่ยนก็ได้
+            img: product.img
         };
-        console.log(updatedProduct); // ส่งข้อมูลไปอัปเดต
-        onSave(updatedProduct); // เรียกฟังก์ชันที่ส่งมาจาก CakeList
-        onRequestClose(); // ปิด Modal
+        console.log(updatedProduct); 
+        onSave(updatedProduct); 
+        onRequestClose(); 
     }
 
     return (
@@ -42,7 +45,7 @@ const EditForm = ({ isOpen, onRequestClose, product, onSave }) => { // เพิ
             overlayClassName="modal-overlay"
         >
             <div className="edit-container">
-                <h2>Edit Menu: {product?.name}</h2> {/* Display product name */}
+                <h2 style={{ fontWeight: "bold" }}>{product?.name_bakery}</h2>
                 <div className="edit-content">
                     <div className="image-section">
                         {product && (
@@ -51,41 +54,24 @@ const EditForm = ({ isOpen, onRequestClose, product, onSave }) => { // เพิ
                     </div>
                     <div className="form-section">
                         <label>Name:</label>
-                        <input type="text" defaultValue={product?.name} ref={nameRef} />
-
-                        <label>Menu Type:</label>
-                        <div className="radio-group">
-                            <label>
-                                <input type="radio" name="category" value="Cake" checked={category === 'Cake'} onChange={() => setCategory('Cake')} />
-                                Cake
-                            </label>
-                            <label>
-                                <input type="radio" name="category" value="Cookie" checked={category === 'Cookie'} onChange={() => setCategory('Cookie')} />
-                                Cookie
-                            </label>
-                            <label>
-                                <input type="radio" name="category" value="Drink" checked={category === 'Drink'} onChange={() => setCategory('Drink')} />
-                                Drink
-                            </label>
-                        </div>
-
-                        <label>Price:</label>
-                        <input type="number" defaultValue={product?.price} ref={priceRef} />
-
-                        <label>Stock:</label>
-                        <input type="number" defaultValue={product?.quantity} ref={stockRef} />
+                        <input type="text" ref={nameRef} defaultValue={product?.name_bakery || ""} />
 
                         <label>Ingredients:</label>
-                        <input type="text" defaultValue={product?.ingredients} ref={ingredientsRef} />
+                        <input type="text" ref={ingredientsRef} defaultValue={product?.ingredients || ""} />
+
+                        <label>Stock:</label>
+                        <input type="number" ref={stockRef} defaultValue={product?.quantity || 0} />
+
+                        <label>Price (THB):</label>
+                        <input type="number" ref={priceRef} defaultValue={product?.price || 0} />
 
                         <div className="form-actions">
-                            <button className="save-button" onClick={handleSave}>Save</button>
-                            <button className="cancel-button" onClick={onRequestClose}>Cancel</button>
+                            <button className="save-button" onClick={handleSave}>SAVE</button>
+                            <button className="cancel-button" onClick={onRequestClose}>CANCEL</button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </Modal>
     );
 };

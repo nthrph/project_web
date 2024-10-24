@@ -69,7 +69,7 @@ const Main = () => {
             <form onSubmit={handleSubmit}>
               <label htmlFor="name">Name:</label>
               <input
-                type="text"
+                type="text-home"
                 id="name"
                 name="name"
                 placeholder="Enter your name"
@@ -78,7 +78,7 @@ const Main = () => {
               /><br />
               <label htmlFor="tel">Tel:</label><br />
               <input
-                type="text"
+                type="text-home"
                 id="tel"
                 name="tel"
                 placeholder="Enter your phone number"

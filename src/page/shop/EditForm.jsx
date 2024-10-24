@@ -54,10 +54,10 @@ const EditForm = ({ isOpen, onRequestClose, product, onSave }) => {
                     </div>
                     <div className="form-section">
                         <label>Name:</label>
-                        <input type="text" ref={nameRef} defaultValue={product?.name_bakery || ""} />
+                        <input type="text-ed" ref={nameRef} defaultValue={product?.name_bakery || ""} />
 
                         <label>Ingredients:</label>
-                        <input type="text" ref={ingredientsRef} defaultValue={product?.ingredients || ""} />
+                        <input type="text-ed" ref={ingredientsRef} defaultValue={product?.ingredients || ""} />
 
                         <label>Stock:</label>
                         <input type="number" ref={stockRef} defaultValue={product?.quantity || 0} />
@@ -66,7 +66,7 @@ const EditForm = ({ isOpen, onRequestClose, product, onSave }) => {
                         <input type="number" ref={priceRef} defaultValue={product?.price || 0} />
 
                         <div className="form-actions">
-                            <button className="save-button" onClick={handleSave}>SAVE</button>
+                            <button className="save-button-ed" onClick={handleSave}>SAVE</button>
                             <button className="cancel-button" onClick={onRequestClose}>CANCEL</button>
                         </div>
                     </div>

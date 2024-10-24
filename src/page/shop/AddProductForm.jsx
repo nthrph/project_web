@@ -38,10 +38,10 @@ Modal.setAppElement('#root');
                 <div className="edit-content">
                     <div className="form-section">
                         <label>Name:</label>
-                        <input type="text" ref={nameRef} placeholder="Enter bakery name" />
+                        <input type="text-ed" ref={nameRef} placeholder="Enter bakery name" />
 
                         <label>Ingredients:</label>
-                        <input type="text" ref={ingredientsRef} placeholder="Enter ingredients" />
+                        <input type="text-ed" ref={ingredientsRef} placeholder="Enter ingredients" />
 
                         <label>Stock:</label>
                         <input type="number" ref={stockRef} placeholder="Enter stock quantity" />
@@ -50,7 +50,7 @@ Modal.setAppElement('#root');
                         <input type="number" ref={priceRef} placeholder="Enter price" />
 
                         <label>Image URL:</label>
-                        <input type="text" ref={imgRef} placeholder="Enter image URL" />
+                        <input type="text-ed" ref={imgRef} placeholder="Enter image URL" />
 
                         <label>Category:</label>
                         <select value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -61,7 +61,7 @@ Modal.setAppElement('#root');
                         </select>
 
                         <div className="form-actions">
-                            <button className="save-button" onClick={handleSave}>SAVE</button>
+                            <button className="save-button-ad" onClick={handleSave}>SAVE</button>
                             <button className="cancel-button" onClick={onRequestClose}>CANCEL</button>
                         </div>
                     </div>

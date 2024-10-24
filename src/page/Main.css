@@ -48,7 +48,7 @@
     /* คุณสามารถปรับขนาดนี้ตามต้องการ */
 }
 
-input[type="text"] {
+input[type="text-home"] {
     padding: 10px;
     margin: 5px 0;
     width: 100%;

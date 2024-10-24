@@ -157,23 +157,25 @@ app.put('/api/updatestatus_cancel/:id', (req, res) => {
     });
 });
 // add Cart customer
+
+//--------add name , tel : home page--------------
 app.post('/api/addcart', (req, res) => {
-    const { name_customer, name_menu, quantity, price, note} = req.body;
-    con.query('INSERT INTO customer (name_customer, name_menu, quantity, price, note, status) VALUES (?, ?, ?, ?, ?, "wait")', 
-    [name_customer, name_menu, quantity, price, note], function (err, result) {
+    const { name_customer, tel} = req.body;
+    con.query('INSERT INTO customer (name_customer , tel,status) VALUES (?, ?,"wait")', 
+    [name_customer,tel], function (err, result) {
         if (err) return res.status(500).send(`Error inserting product: ${err.message}`);
         res.send({ status: "ok" });
     });
 });
 
-app.post('/api/addcart', (req, res) => {
-    const { name_customer, tel,name_menu, quantity, price, note} = req.body;
-    con.query('INSERT INTO customer (name_customer,tel,name_menu, quantity, price, note, status) VALUES (?,?, ?, ?, ?, ?, "wait")', 
-    [name_customer,tel, name_menu, quantity, price, note], function (err, result) {
-        if (err) return res.status(500).send(`Error inserting product: ${err.message}`);
-        res.send({ status: "ok" });
-    });
-});
+// app.post('/api/addcart', (req, res) => {
+//     const { name_customer, tel,name_menu, quantity, price, note} = req.body;
+//     con.query('INSERT INTO customer (name_customer,tel,name_menu, quantity, price, note, status) VALUES (?,?, ?, ?, ?, ?, "wait")', 
+//     [name_customer,tel, name_menu, quantity, price, note], function (err, result) {
+//         if (err) return res.status(500).send(`Error inserting product: ${err.message}`);
+//         res.send({ status: "ok" });
+//     });
+// });
 
 app.get('/menu', (req, res) => {
     let sql = 'SELECT * FROM menu';

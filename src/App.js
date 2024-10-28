@@ -1,39 +1,42 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Status from './page/shop/Status';  // นำเข้าหน้าของ Status
-import CakeList from './page/shop/Cake';
-import CookieList from './page/shop/Cookie';
-import DrinkList from './page/shop/Drink';
+import { CartProvider } from './page/customer/CartContext';
+import Status from './page/shop/Status';  // Shop status page
+import CakeList from './page/shop/Cake';  // Cake list page
+import CookieList from './page/shop/Cookie';  // Cookie list page
+import DrinkList from './page/shop/Drink';  // Drink list page
 
-import Main from './page/Main';
-import Home from './page/customer/Home';
-import Cart from './page/customer/Cart';
-import Order from './page/customer/Order';
-import Cakemenu from './page/customer/Cakemenu';
-import Cookiemenu from './page/customer/Cookiemenu';
-import Drinkmenu from './page/customer/Drinkmenu';
-
+import Main from './page/Main';  // Main page
+import Home from './page/customer/Home';  // Home page
+import Cart from './page/customer/Cart';  // Cart page
+import Order from './page/customer/Order';  // Order page
+import Cakemenu from './page/customer/Cakemenu';  // Cake menu page
+import Cookiemenu from './page/customer/Cookiemenu';  // Cookie menu page
+import Drinkmenu from './page/customer/Drinkmenu';  // Drink menu page
+import PopupForm from './page/customer/PopupForm'; 
 
 function App() {
   return (
     <Router>
+      <CartProvider>
       <Routes>
         <Route index element={<Main />} />
         
-        <Route path="/customer/Home" element={<Home />} />  กำหนดเส้นทางไปที่ Home
-        <Route path="/customer/Cart" element={<Cart />} />
-        <Route path="/customer/Order" element={<Order />} />
-        <Route path="/customer/Cakemenu" element={<Cakemenu />} />
-        <Route path="/customer/Cookiemenu" element={<Cookiemenu />} />
-        <Route path="/customer/Drinkmenu" element={<Drinkmenu />} />
+        <Route path="/customer/home" element={<Home />} />  
+        <Route path="/customer/cart" element={<Cart />} />
+        <Route path="/customer/order" element={<Order />} />
+        <Route path="/customer/cakemenu" element={<Cakemenu />} />
+        <Route path="/customer/cookiemenu" element={<Cookiemenu />} />
+        <Route path="/customer/drinkmenu" element={<Drinkmenu />} />
 
-
-        <Route path="/shop/Cake" element={<CakeList />} />  กำหนดเส้นทางไปที่ Cake
-        <Route path="/shop/Cookie" element={<CookieList />} />  กำหนดเส้นทางไปที่ Cookie
-        <Route path="/shop/Drink" element={<DrinkList />} />  กำหนดเส้นทางไปที่ Drink
-        <Route path="/shop/Status" element={<Status />} />  กำหนดเส้นทางไปที่ Status
-        
+        <Route path="/shop/cake" element={<CakeList />} />  
+        <Route path="/shop/cookie" element={<CookieList />} />  
+        <Route path="/shop/drink" element={<DrinkList />} />  
+        <Route path="/shop/status" element={<Status />} />  
       </Routes>
+      {/* Place PopupForm outside Routes to ensure it's always available */}
+      <PopupForm />
+      </CartProvider>
     </Router>
   );
 }

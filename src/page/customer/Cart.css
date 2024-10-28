@@ -52,4 +52,21 @@
   .cart-item-delete:hover {
     background-color: darkred;
   }
+
+  .order-all-button {
+    position: fixed; 
+    bottom: 20px;   
+    right: 20px;    
+    padding: 10px 20px; 
+    background-color: #28a745; 
+    color: white;   
+    border: none; 
+    font-weight: bold;  
+    border-radius: 5px; 
+    cursor: pointer;  
+  }
+  
+  .order-all-button:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
   

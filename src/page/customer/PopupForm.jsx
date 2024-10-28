@@ -31,7 +31,8 @@ const PopupForm = ({ isOpen, onRequestClose, product }) => {
             ingredients: product.ingredients,
             price: product.price,
             quantity: quantity, // Set the quantity for cart
-            img: product.img
+            img: product.img,
+            stock: product.quantity
         };
 
         addToCart(updatedProduct);

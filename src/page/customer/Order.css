@@ -1,71 +1,70 @@
 .h1 {
-    text-align: center;
-    font-family: 'Arial', sans-serif;
-    margin-bottom: 20px;
-  }
-  
-  .order-container {
-    display: flex;
-    flex-direction: column;
-    margin: 20px;
-  }
-  
-  .order {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-  }
-  
-  .order-img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover; 
-    border-radius: 8px;
-  }
-  
-  .order-details {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 20px;
-    flex-grow: 1;
-  }
-  
-  .order-name {
-    font-family: 'Cursive', sans-serif;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: left;
-    margin-top: 0; 
-  }
-  
-  .order-quantity {
-    font-size: 1rem;
-  }
-  
-  .order-status {
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-  }
-  
-  .status-indicator {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .status-wait {
-    background-color: yellow;
-  }
-  
-  .status-ready {
-    background-color: green;
-  }
-  
-  .status-cancelled {
-    background-color: red;
-  }
-  
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  margin-bottom: 20px;
+}
+
+.order-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.order {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.order-img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover; 
+  border-radius: 8px;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20px;
+  flex-grow: 1;
+}
+
+.order-name {
+  font-family: 'Cursive', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 0; 
+}
+
+.order-quantity {
+  font-size: 1rem;
+}
+
+.order-status {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+}
+
+.status-indicator {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.status-wait {
+  background-color: yellow;
+}
+
+.status-ready {
+  background-color: green;
+}
+
+.status-cancelled {
+  background-color: red;
+}

@@ -8,6 +8,7 @@ Modal.setAppElement('#root');
 
 const PopupForm = ({ isOpen, onRequestClose, product }) => { 
     const [quantity, setQuantity] = useState(1);
+    const [note, setNote] = useState('');
     const { addToCart } = useContext(CartContext);
     const navigate = useNavigate(); 
 
@@ -32,7 +33,9 @@ const PopupForm = ({ isOpen, onRequestClose, product }) => {
             price: product.price,
             quantity: quantity, // Set the quantity for cart
             img: product.img,
-            stock: product.quantity
+            stock: product.quantity,
+            note:note
+
         };
 
         addToCart(updatedProduct);
@@ -68,6 +71,9 @@ const PopupForm = ({ isOpen, onRequestClose, product }) => {
                             value={quantity} 
                             onChange={(e) => setQuantity(parseInt(e.target.value))} 
                         />
+                        <label>Note:</label><input value={note} 
+                            onChange={(e) => setNote(e.target.value)} >
+                            </input>
 
                         <div className="form-actions">
                             <button className="save-button" onClick={handleSave}>ADD TO CART</button>

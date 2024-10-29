@@ -10,6 +10,7 @@
 import homescreen from '../../images/screen2.png';
 
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../shop/StyleMenu.css';
 import '../customer/PopupForm.css';
@@ -27,6 +28,9 @@ import { useNavigate } from 'react-router-dom'; // ใช้ useNavigate สำ�
 
 const Home = () => {
     const [cakes, setCakes] = useState([]);
+    const location = useLocation();
+    const { name, tel } = location.state || {};
+    console.log(name);
     const [cookies, setCookies] = useState([]);
     const [drinks, setDrinks] = useState([]);
 

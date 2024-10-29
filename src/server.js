@@ -176,31 +176,128 @@ app.post('/api/addcart', (req, res) => {
 //         res.send({ status: "ok" });
 //     });
 // });
+app.post('/api/addOrders', (req, res) => {
+    const { cartItems, customerInfo } = req.body;
 
-app.get('/menu', (req, res) => {
-    let sql = 'SELECT * FROM menu';
-    con.query(sql, (err, result) => {  // เปลี่ยนจาก db เป็น con
-        if (err) throw err;
+    // ตรวจสอบว่ามี cartItems และเป็น array หรือไม่
+    if (!cartItems || !Array.isArray(cartItems)) {
+        return res.status(400).send('Invalid cartItems data');
+    }
+
+    const promises = cartItems.map(item => {
+        const { name, quantity, price, note } = item;
+
+        if (!name || !quantity || !price) {
+            return Promise.reject(new Error('Missing required fields in cart item'));
+        }
+
+        return new Promise((resolve, reject) => {
+           
+            con.query(
+                'SELECT * FROM customer WHERE name_customer = ? AND name_menu = ?',
+                [customerInfo.name, name],
+                (err, results) => {
+                    if (err) return reject(err);
+
+                    if (results.length > 0) {
+                        con.query(
+                            'UPDATE customer SET quantity = quantity + ? WHERE name_menu  = ?',
+                            [quantity, name],
+                            (err, result) => {
+                                if (err) return reject(err);
+
+                                // อัปเดตจำนวนสินค้าคงเหลือใน `products_shop`
+                                con.query(
+                                    'UPDATE products_shop SET quantity= quantity- ? WHERE name_bakery = ?',
+                                    [quantity, name],
+                                    (err, result) => {
+                                        if (err) return reject(err);
+                                        resolve(results[0].id);
+                                    }
+                                );
+                            }
+                        );
+                    } else {
+                        // ถ้าไม่มีสินค้า ให้แทรกข้อมูลใหม่ลงใน `customer`
+                        con.query(
+                            'INSERT INTO customer (name_customer, tel, name_menu, price, quantity, note, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                            [customerInfo.name, customerInfo.tel, name, price, quantity, note || '', 'wait'],
+                            (err, result) => {
+                                if (err) return reject(err);
+
+                                // อัปเดตจำนวนสินค้าคงเหลือใน `products_shop`
+                                con.query(
+                                    'UPDATE products_shop SET stock = stock - ? WHERE name_menu = ?',
+                                    [quantity, name],
+                                    (err, result) => {
+                                        if (err) return reject(err);
+                                        resolve(result.insertId);
+                                    }
+                                );
+                            }
+                        );
+                    }
+                }
+            );
+        });
+    });
+
+    // รอให้ Promise ทั้งหมดเสร็จสิ้น
+    Promise.all(promises)
+        .then(orderIds => {
+            res.status(201).send({ status: "ok", orderIds });
+        })
+        .catch(err => {
+            res.status(500).send(`Error inserting orders: ${err.message}`);
+        });
+});
+
+  
+
+// app.get('/menu', (req, res) => {
+//     let sql = 'SELECT * FROM menu';
+//     con.query(sql, (err, result) => {  
+//         if (err) throw err;
+//         res.send(result);
+//     });
+// });
+// app.get('/orderss', (req, res) => {
+//     let sql = 'SELECT * FROM customer_orders';
+//     con.query(sql, (err, result) => {  
+//         if (err) throw err;
+//         res.send(result);
+//     });
+// });
+app.get('/orders', (req, res) => {
+    const nameCustomer = req.query.name_customer;  // กำหนดค่า nameCustomer ก่อนใช้
+
+    let sql = `
+        SELECT 
+            c.name_menu, 
+            c.quantity, 
+            c.status, 
+            p.img
+        FROM 
+            customer AS c 
+        INNER JOIN 
+            products_shop AS p ON c.name_menu = p.name_bakery
+        WHERE 
+            c.name_customer = ?
+    `;
+
+    console.log(`Fetching orders for customer: ${nameCustomer}`); // แสดงชื่อผู้ใช้ที่ใช้ในการดึงข้อมูล
+
+    con.query(sql, [nameCustomer], (err, result) => {  
+        if (err) {
+            console.error(`Error fetching orders: ${err.message}`);
+            res.status(500).send(`Error fetching orders: ${err.message}`);
+            return;
+        }
         res.send(result);
     });
 });
 
-app.delete('/menu/delete/:id', (req, res) => {
-    const { id } = req.params;
 
-    const sql = 'DELETE FROM menu WHERE id = ?';
-    con.query(sql, [id], (err, result) => {  // เปลี่ยนจาก db เป็น con
-        if (err) {
-            console.error('Error deleting item:', err);
-            return res.status(500).send({ message: 'Error deleting item' });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).send({ message: 'Item not found' });
-        }
-
-        res.status(200).send({ message: 'Item deleted successfully' });
-    });
-});
 app.post('/menu/save', (req, res) => {
     const { name, price, ingredients, piece, img_url } = req.body;
 
@@ -233,14 +330,14 @@ app.post('/menu/save', (req, res) => {
 });
 
 
-app.post('/menu/update-stock', (req, res) => {
-    const { id, newStock } = req.body;
+// app.post('/menu/update-stock', (req, res) => {
+//     const { id, newStock } = req.body;
 
-    con.query('UPDATE products_shop SET quantity = ? WHERE id = ?', [newStock, id], function (err, result) {
-        if (err) return res.status(500).send(`Error updating stock: ${err.message}`);
-        res.send({ status: "ok" });
-    });
-});
+//     con.query('UPDATE products_shop SET quantity = ? WHERE id = ?', [newStock, id], function (err, result) {
+//         if (err) return res.status(500).send(`Error updating stock: ${err.message}`);
+//         res.send({ status: "ok" });
+//     });
+// });
 
 
 app.listen(port, () => {

@@ -26,7 +26,7 @@ const Cart = () => {
       <NavBar_customer />
       <h2>Your Cart</h2>
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p></p>
       ) : (
         <div className="cart-container">
           <ul>
@@ -34,7 +34,7 @@ const Cart = () => {
               <li key={index} className="cart-item">
                 <img src={item.img} alt={item.name} className="cart-item-image" />
                 <div >
-                  <h2 className="cart-item-title">{item.name}</h2>
+                  <h2 className="cart-item-title">{item.name} </h2>
                   <p className="cart-item-description">{item.ingredients}</p>
                 </div>
                 <div className="cart-item-quantity">
@@ -52,7 +52,7 @@ const Cart = () => {
               </li>
             ))}
           </ul>
-          <h3>Total: {getTotalPrice()} THB</h3>
+          <h3>Total: {getTotalPrice()}THB</h3>
           <button className="order-all-button" onClick={() => OrderAll()}>Order All</button>
         </div>
       )}

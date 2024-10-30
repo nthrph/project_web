@@ -23,8 +23,11 @@ export const CartProvider = ({ children }) => {
     }, [customerInfo]);
 
     const updateCustomerInfo = (name, tel) => {
-        setCustomerInfo({ name, tel });
+        const newCustomerInfo = { name, tel };
+        setCustomerInfo(newCustomerInfo);
+        localStorage.setItem('customerInfo', JSON.stringify(newCustomerInfo)); // บันทึกลง localStorage ทันที
     };
+    
 
     const addToCart = (item) => {
         setCartItems((prevItems) => {

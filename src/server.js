@@ -227,7 +227,7 @@ app.post('/api/addOrders', (req, res) => {
 
                                 // อัปเดตจำนวนสินค้าคงเหลือใน `products_shop`
                                 con.query(
-                                    'UPDATE products_shop SET stock = stock - ? WHERE name_menu = ?',
+                                    'UPDATE products_shop SET quantity = quantity - ? WHERE name_bakery = ?',
                                     [quantity, name],
                                     (err, result) => {
                                         if (err) return reject(err);

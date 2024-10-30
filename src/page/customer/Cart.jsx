@@ -5,7 +5,7 @@ import NavBar_customer from '../customer/NavBar_customer';
 import './Cart.css';
 import { RiDeleteBin7Fill } from "react-icons/ri";
 const Cart = () => {
-  const { cartItems, OrderAll, removeFromCart, getTotalPrice, addToCart } = useCart();
+  const { cartItems, OrderAll, removeFromCart, getTotalPrice, addToCart , customerInfo } = useCart();
 
   const handleIncreaseQuantity = (item) => {
     if (item.quantity < item.stock) {
@@ -24,6 +24,7 @@ const Cart = () => {
   return (
     <div>
       <NavBar_customer />
+      <h2>Welcome, {customerInfo.name}</h2> {/* เพิ่มการแสดงชื่อผู้ใช้ */}
       <h2>Your Cart</h2>
       {cartItems.length === 0 ? (
         <p></p>

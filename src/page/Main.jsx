@@ -30,15 +30,22 @@ const Main = () => {
     e.preventDefault();
 
     if (name.trim() === "" || tel.trim() === "") {
-      setErrorMessage("Please fill in both fields.");
-      return;
+        setErrorMessage("Please fill in both fields.");
+        return;
     }
-    updateCustomerInfo(name, tel);
-    
-    setSuccessMessage("Data added successfully!");
-    navigate("/customer/Home",{ state: { name, tel }});
-  };
 
+    // อัปเดตข้อมูลใน CartContext
+    updateCustomerInfo(name, tel); // ส่งข้อมูลไปยัง CartContext
+
+    // เก็บข้อมูลลง Local Storage
+    localStorage.setItem('name', name);
+    localStorage.setItem('tel', tel);
+
+    setSuccessMessage("Data added successfully!");
+    navigate("/customer/Home");
+};
+
+  
   const handleStoreClick = () => {
     navigate("/shop/Cake");
   };
@@ -59,7 +66,7 @@ const Main = () => {
             <form onSubmit={handleSubmit}>
               <label htmlFor="name">Name:</label>
               <input
-                type="text"
+                type="text-home"
                 id="name"
                 name="name"
                 placeholder="Enter your name"
@@ -68,7 +75,7 @@ const Main = () => {
               /><br />
               <label htmlFor="tel">Tel:</label><br />
               <input
-                type="text"
+                type="text-home"
                 id="tel"
                 name="tel"
                 placeholder="Enter your phone number"

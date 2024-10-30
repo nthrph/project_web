@@ -5,9 +5,11 @@
 }
 
 .order-container {
-  display: flex;
-  flex-direction: column;
-  margin: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin: 50px;
 }
 
 .order {
@@ -61,10 +63,20 @@
   background-color: yellow;
 }
 
-.status-ready {
+.status-done {
   background-color: green;
 }
 
-.status-cancelled {
+.status-cancel {
   background-color: red;
+}
+.empty-order-image {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+}
+.empty-order {
+  text-align: center;
+  padding: 50px 20px;
+  color: #6c757d;
 }

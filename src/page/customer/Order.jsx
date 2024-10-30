@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
-  const [name, setName] = useState(localStorage.getItem('name') || ''); // ดึงค่า name จาก Local Storage
+  const [name, setName] = useState(localStorage.getItem('name') || ''); // Fetch name from Local Storage
   const location = useLocation(); 
   console.log("Customer name from location:", name);
 
@@ -21,17 +21,23 @@ const Order = () => {
       })
       .catch(error => console.error('Error fetching orders:', error));
     }
-  }, [name]);  // ใช้ name เป็น dependency 
+  }, [name]);  // Use name as a dependency 
 
   return (
     <div>
       <NavBar_customer />
-      <h1 className="h1">MY ORDER</h1>
-      <div className="order-container">
-        {orders.length === 0 ? (  // เช็คว่ามีคำสั่งซื้อหรือไม่
-          <p>No orders found for {name}</p>
+      <h2>YOUR ORDER</h2>
+      
+        {orders.length === 0 ? (  // Check if there are any orders
+          <div className="empty-order"> 
+            <img src="https://cdn.vectorstock.com/i/preview-1x/98/59/slice-cake-with-drink-coffee-kawaii-style-vector-26769859.jpg" alt="Empty Cart" className="empty-order-image" />
+            <h3>No Order</h3>
+            <p>Looks like you haven't ordered anything yet.</p>
+        </div>  
+
         ) : (
-          orders.map((order, index) => (
+        <div className="order-container">
+         { orders.map((order, index) => (
             <div className="order" key={index}>
               <img src={order.img} alt={order.name_menu} className="order-img" />
               <div className="order-details">
@@ -43,9 +49,10 @@ const Order = () => {
                 {order.status}
               </div>
             </div>
-          ))
+          ))}
+          </div>
         )}
-      </div>
+      
     </div>
   );
 };

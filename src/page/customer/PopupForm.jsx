@@ -71,7 +71,7 @@ const PopupForm = ({ isOpen, onRequestClose, product }) => {
                             value={quantity} 
                             onChange={(e) => setQuantity(parseInt(e.target.value))} 
                         />
-                        <label>Note:</label><input value={note} 
+                        <label>Note:</label><input type="text-ed" value={note} 
                             onChange={(e) => setNote(e.target.value)} >
                             </input>
 

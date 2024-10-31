@@ -29,8 +29,8 @@ const OrderComponent = () => {
   }, []);
 
   const updateOrderStatus = async (id, newStatus) => {
-    const url = newStatus === 'done' 
-      ? `http://localhost:5000/api/updatestatus_done/${id}` 
+    const url = newStatus === 'done'
+      ? `http://localhost:5000/api/updatestatus_done/${id}`
       : `http://localhost:5000/api/updatestatus_cancel/${id}`;
 
     try {
@@ -81,13 +81,13 @@ const OrderComponent = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map(order => (
+            {orders.map((order, index) => (
               <tr key={order.id} style={{ backgroundColor: '#ffecec', border: '1px solid #ffcccc' }}>
-                <td>{order.id}</td>
+                <td>{index + 1}</td> {/* แสดงหมายเลขลำดับที่จัดเรียงใน frontend */}
                 <td>{order.name_customer}</td>
                 <td>{order.name_menu}</td>
                 <td>{order.quantity}</td>
-                <td>{order.price}</td> {/* Displaying the price */}
+                <td>{order.price}</td>
                 <td>{order.note}</td>
                 <td>
                   <span style={{ color: order.status === 'done' ? 'green' : order.status === 'cancel' ? 'red' : 'orange' }}>
@@ -95,7 +95,6 @@ const OrderComponent = () => {
                   </span>
                 </td>
                 <td>
-                  {/* Hide buttons if the status is done or cancelled */}
                   {order.status === 'wait' && (
                     <>
                       <button
@@ -116,6 +115,7 @@ const OrderComponent = () => {
               </tr>
             ))}
           </tbody>
+
         </table>
       )}
     </div>

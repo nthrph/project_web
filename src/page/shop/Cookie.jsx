@@ -70,7 +70,7 @@ const CookList = () => {
     // ฟังก์ชันสำหรับบันทึกสินค้าที่เพิ่มใหม่
     const handleSavenewProduct = (newProduct) => {
         console.log("Data sent to backend:", newProduct);  // ตรวจสอบว่า category ถูกส่งไปจริง
-        axios.post(`${URL}/api/addproduct`, {
+        axios.post(`${URL}/api/addeproduct`, {
             name_bakery: newProduct.name,
             category: newProduct.category,  // ตรวจสอบว่า category ถูกส่งไป
             ingredients: newProduct.ingredients,
@@ -102,19 +102,28 @@ const CookList = () => {
                 ) : (
                     <div className="cake-grid">
                         {cookie.length > 0 ? (
-                            cookie.map((cookie) => (
-                                <div key={cookie.id} className="cake-card">
-                                    <img src={cookie.img} alt={cookie.name_bakery} className="cake-image" />
-                                    <p style={{ fontWeight: "bold" }}>{cookie.name_bakery}</p>
-                                    <p><span style={{ fontWeight: "bold" }}>Stock: </span>{cookie.quantity}</p>
-                                    <p className="cake-price">{cookie.price} THB</p>
-                                    <button className="edit-button" onClick={() => openEditForm(cookie)}> <FaEdit /> </button>
-                                </div>
-                            ))
+                            cookie.map((cookie, index) => {
+                               
+                                if (!cookie) {
+                                    console.warn(`Cake at index ${index} is undefined`); // แจ้งเตือนเมื่อมีค่า undefined
+                                    return null; // ข้ามไป
+                                }
+
+                                return (
+                                    <div key={cookie.id} className="cake-card">
+                                        <img src={cookie.img || "default-image.jpg"} alt={cookie.name_bakery || "Cake"} className="cake-image" />
+                                        <p style={{ fontWeight: "bold" }}>{cookie.name_bakery || "Unnamed Cake"}</p>
+                                        <p><span style={{ fontWeight: "bold" }}>Stock: </span>{cookie.quantity || 0}</p>
+                                        <p className="cake-price">{cookie.price ? `${cookie.price} THB` : "Price not available"}</p>
+                                        <button className="edit-button" onClick={() => openEditForm(cookie)}> <FaEdit /> </button>
+                                    </div>
+                                );
+                            })
                         ) : (
-                            <p>No cakes available.</p>
+                            <p>No cookie available.</p>
                         )}
                     </div>
+                   
                 )}
                 <button className="add-button" onClick={openAddForm}>+</button>
             </div>

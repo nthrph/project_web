@@ -70,7 +70,7 @@ const DrinkList = () => {
     // ฟังก์ชันสำหรับบันทึกสินค้าที่เพิ่มใหม่
     const handleSavenewProduct = (newProduct) => {
         console.log("Data sent to backend:", newProduct);  // ตรวจสอบว่า category ถูกส่งไปจริง
-        axios.post(`${URL}/api/addproduct`, {
+        axios.post(`${URL}/api/addeproduct`, {
             name_bakery: newProduct.name,
             category: newProduct.category,  // ตรวจสอบว่า category ถูกส่งไป
             ingredients: newProduct.ingredients,
@@ -102,15 +102,23 @@ const DrinkList = () => {
                 ) : (
                     <div className="cake-grid">
                         {drink.length > 0 ? (
-                            drink.map((drink) => (
-                                <div key={drink.id} className="cake-card">
-                                    <img src={drink.img} alt={drink.name_bakery} className="cake-image" />
-                                    <p style={{ fontWeight: "bold" }}>{drink.name_bakery}</p>
-                                    <p><span style={{ fontWeight: "bold" }}>Stock: </span>{drink.quantity}</p>
-                                    <p className="cake-price">{drink.price} THB</p>
-                                    <button className="edit-button" onClick={() => openEditForm(drink)}> <FaEdit /> </button>
-                                </div>
-                            ))
+                            drink.map((drink, index) => {
+                               
+                                if (!drink) {
+                                    console.warn(`Cake at index ${index} is undefined`); // แจ้งเตือนเมื่อมีค่า undefined
+                                    return null; // ข้ามไป
+                                }
+
+                                return (
+                                    <div key={drink.id} className="cake-card">
+                                        <img src={drink.img || "default-image.jpg"} alt={drink.name_bakery || "Cake"} className="cake-image" />
+                                        <p style={{ fontWeight: "bold" }}>{drink.name_bakery || "Unnamed Cake"}</p>
+                                        <p><span style={{ fontWeight: "bold" }}>Stock: </span>{drink.quantity || 0}</p>
+                                        <p className="cake-price">{drink.price ? `${drink.price} THB` : "Price not available"}</p>
+                                        <button className="edit-button" onClick={() => openEditForm(drink)}> <FaEdit /> </button>
+                                    </div>
+                                );
+                            })
                         ) : (
                             <p>No drink available.</p>
                         )}
